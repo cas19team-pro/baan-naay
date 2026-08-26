@@ -1,0 +1,1410 @@
+<title>บ้านนาย (วัดเสมียนฯ)</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="บ้านนาย (วัดเสมียนฯ)">
+<meta property="og:description" content="บันทึกการรับลูก + ดูแลบ้าน พร้อมติดตามค่าเดินทาง ค่าแรง และค่าใช้จ่าย">
+<meta name="description" content="บันทึกการรับลูก + ดูแลบ้าน พร้อมติดตามค่าเดินทาง ค่าแรง และค่าใช้จ่าย">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS ── */
+:root {
+  --p:          #1565C0;
+  --p-mid:      #1976D2;
+  --p-light:    #64B5F6;
+  --p-pale:     #E3F2FD;
+  --p-grad:     linear-gradient(145deg, #2196F3 0%, #0D47A1 100%);
+  --bg:         #F2F7FF;
+  --surface:    #FFFFFF;
+  --th:         #0A2742;
+  --tb:         #2C4A6B;
+  --ts:         #6888A8;
+  --border:     #C5DCF5;
+  --ok:         #1B8A6B;
+  --ok-bg:      #E4F8F1;
+  --warn:       #C87900;
+  --warn-bg:    #FFF3DC;
+  --err:        #C0392B;
+  --err-bg:     #FEEFED;
+  --shadow:     0 2px 18px rgba(21,101,192,.10);
+  --r:          14px;
+  --rs:         9px;
+}
+
+/* app commits to light palette for readability — dark mode intentionally not applied */
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Sarabun',sans-serif;
+  font-size:15px;line-height:1.55;
+  background:var(--bg);color:var(--tb);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+textarea,input{font-family:inherit}
+img{max-width:100%;display:block}
+
+/* ── WRAPPER ── */
+.app-wrap{max-width:540px;margin:0 auto;position:relative}
+
+/* ── HEADER ── */
+.app-header{
+  background:var(--p-grad);
+  padding:18px 18px 0;
+  position:sticky;top:0;z-index:100;
+  overflow:hidden;
+}
+.header-deco{
+  position:absolute;right:-30px;top:-40px;
+  width:160px;height:160px;
+  background:rgba(255,255,255,.07);
+  border-radius:50%;pointer-events:none;
+}
+.header-deco2{
+  position:absolute;right:50px;top:-70px;
+  width:100px;height:100px;
+  background:rgba(255,255,255,.05);
+  border-radius:50%;pointer-events:none;
+}
+.brand{display:flex;align-items:center;gap:10px;position:relative}
+.brand-icon{
+  width:42px;height:42px;
+  background:rgba(255,255,255,.18);
+  border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.brand-text h1{
+  font-family:'Kanit',sans-serif;
+  font-size:20px;font-weight:700;
+  color:#fff;letter-spacing:.01em;
+  text-wrap:balance;
+}
+.brand-text p{font-size:11.5px;color:rgba(255,255,255,.72);margin-top:1px}
+.tab-nav{
+  display:flex;gap:4px;margin-top:14px;position:relative;
+}
+.tab-btn{
+  flex:1;padding:11px 10px;
+  border:none;
+  background:rgba(255,255,255,.14);
+  color:rgba(255,255,255,.72);
+  border-radius:10px 10px 0 0;
+  font-family:'Kanit',sans-serif;
+  font-size:14px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:background .2s,color .2s;
+  line-height:1;
+}
+.tab-btn.active{
+  background:var(--surface);
+  color:var(--p);font-weight:700;
+}
+.tab-btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* ── CONTENT ── */
+.tab-panel{display:none;padding:14px 14px 48px}
+.tab-panel.active{display:block}
+
+/* ── STAT CARDS ── */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:9px;margin-bottom:14px;
+}
+.stat{
+  background:var(--surface);
+  border-radius:var(--r);
+  padding:14px 8px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+.stat-n{
+  font-family:'Kanit',sans-serif;
+  font-size:28px;font-weight:700;line-height:1;
+  color:var(--p);
+  font-variant-numeric:tabular-nums;
+}
+.stat-n.ok{color:var(--ok)}
+.stat-n.warn{color:var(--warn)}
+.stat-n.money{font-size:17px}
+.stat-lbl{font-size:11px;color:var(--ts);margin-top:4px;font-weight:600;line-height:1.3}
+
+/* ── CARD SHELL ── */
+.card{
+  background:var(--surface);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  margin-bottom:12px;
+  overflow:hidden;
+}
+.card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 15px;cursor:pointer;user-select:none;
+}
+.card-title{
+  font-family:'Kanit',sans-serif;font-size:15px;font-weight:600;
+  color:var(--th);
+  display:flex;align-items:center;gap:8px;
+}
+.card-icon{font-size:18px;transition:transform .25s}
+.card-icon.open{transform:rotate(45deg)}
+.card-body{padding:0 15px 15px;display:none}
+.card-body.open{display:block}
+
+/* ── FORM ── */
+.fg{margin-bottom:13px}
+.flbl{
+  display:block;font-size:11px;font-weight:700;
+  color:var(--ts);
+  text-transform:uppercase;letter-spacing:.07em;
+  margin-bottom:6px;
+}
+.finput{
+  width:100%;padding:10px 13px;
+  border:1.5px solid var(--border);border-radius:var(--rs);
+  background:var(--bg);color:var(--th);
+  font-size:14px;outline:none;
+  transition:border-color .18s;
+  resize:vertical;
+}
+.finput:focus{border-color:var(--p-mid)}
+.finput::placeholder{color:var(--ts)}
+
+/* ── DATE PICKER ── */
+.date-row{display:flex;gap:6px}
+.date-row .finput{flex:1;min-width:0;padding-left:8px;padding-right:4px;appearance:none;-webkit-appearance:none;cursor:pointer}
+.date-row .finput.mm{flex:2.2}
+.date-row .finput.yy{flex:1.6}
+
+/* ── STATUS TOGGLES ── */
+.st-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.st-wrap{position:relative}
+.st-wrap input{position:absolute;opacity:0;width:0;height:0}
+.st-lbl{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 12px;
+  border:1.5px solid var(--border);
+  border-radius:var(--rs);background:var(--bg);
+  color:var(--tb);font-size:13px;cursor:pointer;
+  transition:all .18s;
+}
+.st-dot{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--border);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:transparent;
+  transition:all .18s;
+}
+.st-wrap input:checked + .st-lbl{
+  border-color:var(--ok);background:var(--ok-bg);
+  color:var(--ok);font-weight:600;
+}
+.st-wrap input:checked + .st-lbl .st-dot{
+  background:var(--ok);color:#fff;
+}
+
+/* ── PHOTO ── */
+.photo-row{display:flex;align-items:center;gap:10px}
+.photo-pick{
+  display:flex;align-items:center;gap:7px;
+  padding:9px 14px;
+  border:1.5px dashed var(--p-light);border-radius:var(--rs);
+  background:var(--p-pale);color:var(--p);
+  font-size:13px;font-weight:600;cursor:pointer;
+  transition:background .18s;flex-shrink:0;
+}
+.photo-pick:hover{background:#d2eafe}
+.photo-thumb{
+  width:56px;height:56px;border-radius:9px;
+  object-fit:cover;display:none;
+  border:2px solid var(--border);
+}
+
+/* ── CLAIM CHECKBOX ── */
+.claim-row{
+  display:flex;align-items:center;gap:9px;
+  padding:10px 13px;
+  border:1.5px solid var(--border);border-radius:var(--rs);
+  background:var(--bg);color:var(--tb);
+  cursor:pointer;font-size:13px;user-select:none;
+}
+.claim-row input{margin:0;width:16px;height:16px;accent-color:var(--p);cursor:pointer}
+
+/* ── PRIMARY BUTTON ── */
+.btn-pri{
+  width:100%;padding:13px;
+  background:var(--p-grad);color:#fff;border:none;
+  border-radius:var(--rs);
+  font-family:'Kanit',sans-serif;font-size:15px;font-weight:600;
+  transition:opacity .18s;
+}
+.btn-pri:hover{opacity:.9}
+.btn-pri:active{opacity:.8}
+.btn-pri:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+
+/* ── DIVIDER ── */
+.divider{
+  display:flex;align-items:center;gap:10px;
+  margin:16px 0 12px;
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider span{
+  font-size:11px;font-weight:700;color:var(--ts);
+  text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;
+}
+
+/* ── RECORD CARD ── */
+.rec{
+  background:var(--surface);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  margin-bottom:10px;overflow:hidden;
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.rec{animation:slideIn .22s ease}
+@media(prefers-reduced-motion:reduce){.rec{animation:none}}
+
+.rec-head{
+  padding:12px 14px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+}
+.rec-date{
+  font-family:'Kanit',sans-serif;
+  font-size:14px;font-weight:600;color:var(--th);
+}
+.rec-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:20px;
+  font-size:11px;font-weight:700;line-height:1.4;
+}
+.tag-ok{background:var(--ok-bg);color:var(--ok)}
+.tag-no{background:var(--err-bg);color:var(--err)}
+.tag-claim{background:var(--p-pale);color:var(--p)}
+.tag-pending{background:var(--warn-bg);color:var(--warn)}
+
+.rec-photo{width:100%;max-height:180px;object-fit:cover;border-top:1px solid var(--border)}
+.rec-note{
+  padding:8px 14px;font-size:13px;color:var(--ts);
+  border-top:1px solid var(--border);background:var(--bg);
+}
+.rec-actions{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.btn-del{
+  width:30px;height:30px;border-radius:7px;
+  border:1px solid var(--border);background:var(--bg);
+  color:var(--ts);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;
+}
+.btn-del:hover{border-color:var(--err);color:var(--err);background:var(--err-bg)}
+.btn-toggle{
+  font-size:11px;font-weight:600;white-space:nowrap;
+  padding:4px 10px;border-radius:20px;
+  border:1.5px solid var(--border);background:transparent;
+  color:var(--ts);transition:all .18s;
+}
+.btn-toggle:hover{border-color:var(--p);color:var(--p)}
+
+/* ── EXPENSE SECTION (house) ── */
+.exp-zone{padding:10px 14px;border-top:1px solid var(--border);background:var(--bg)}
+.exp-zone-lbl{
+  font-size:11px;font-weight:700;color:var(--ts);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;
+}
+.exp-list{display:flex;flex-direction:column;gap:7px}
+.exp-row{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 11px;
+  border-radius:8px;background:var(--surface);
+  border:1px solid var(--border);
+}
+.exp-name{flex:1;font-size:13px;color:var(--tb)}
+.exp-amt{
+  font-family:'Kanit',sans-serif;font-weight:600;font-size:13px;
+  color:var(--th);font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.exp-tag{cursor:pointer;user-select:none}
+
+/* expense form rows */
+.exp-form-row{display:flex;gap:7px;align-items:center;margin-bottom:7px}
+.exp-form-row input{
+  padding:9px 10px;
+  border:1.5px solid var(--border);border-radius:8px;
+  background:var(--bg);color:var(--th);font-size:13px;outline:none;
+}
+.exp-form-row input:focus{border-color:var(--p-mid)}
+.exp-name-in{flex:1}
+.exp-amt-in{width:82px}
+.btn-del-sm{
+  width:30px;height:30px;flex-shrink:0;border-radius:7px;
+  border:1.5px solid var(--border);background:var(--bg);
+  color:var(--ts);font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;
+}
+.btn-del-sm:hover{border-color:var(--err);color:var(--err);background:var(--err-bg)}
+.btn-add-exp{
+  width:100%;padding:9px;
+  border:1.5px dashed var(--p-light);border-radius:var(--rs);
+  background:var(--p-pale);color:var(--p);
+  font-size:13px;font-weight:600;
+  transition:background .18s;
+}
+.btn-add-exp:hover{background:#d2eafe}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:32px 20px;color:var(--ts)}
+.empty .ico{font-size:40px;margin-bottom:10px}
+.empty p{font-size:14px;line-height:1.6}
+
+/* ── HISTORY LIST ── */
+.hist{display:flex;flex-direction:column}
+
+/* ── MODAL ── */
+.modal-ov{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.modal-box{
+  background:var(--surface);
+  width:100%;max-width:540px;
+  border-radius:20px 20px 0 0;
+  max-height:88vh;
+  display:flex;flex-direction:column;
+  animation:slideUp .22s ease;
+}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.modal-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:15px 17px 13px;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.modal-title{font-family:'Kanit',sans-serif;font-size:16px;font-weight:700;color:var(--th)}
+.btn-close{
+  width:32px;height:32px;border-radius:50%;
+  border:none;background:var(--bg);color:var(--ts);
+  font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.btn-close:hover{background:var(--err-bg);color:var(--err)}
+.modal-bd{padding:14px 16px;overflow-y:auto;flex:1}
+.modal-ft{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0}
+.btn-edit{
+  width:30px;height:30px;border-radius:7px;
+  border:1px solid var(--p-light);background:var(--p-pale);
+  color:var(--p);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;
+}
+.btn-edit:hover{background:var(--p-mid);color:#fff;border-color:var(--p-mid)}
+</style>
+
+<div class="app-wrap">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="header-deco"></div>
+    <div class="header-deco2"></div>
+    <div class="brand">
+      <div class="brand-icon">🏠</div>
+      <div class="brand-text">
+        <h1>บ้านนาย (วัดเสมียนฯ)</h1>
+        <p>ระบบจดบันทึกงานประจำวัน · v4</p>
+      </div>
+    </div>
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tbtn-child" onclick="switchTab('child')">
+        🚗 รับลูก
+      </button>
+      <button class="tab-btn" id="tbtn-house" onclick="switchTab('house')">
+        🔧 ดูแลบ้าน
+      </button>
+    </div>
+    <div style="text-align:center;font-size:11px;padding:4px 0 0;min-height:16px">
+      <span id="sync-badge" style="transition:color 0.3s"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TAB 1 : รับลูก ═══════════════ -->
+  <div class="tab-panel active" id="panel-child">
+
+    <div class="stats-grid" style="margin-top:14px">
+      <div class="stat">
+        <div class="stat-n" id="c-total">0</div>
+        <div class="stat-lbl">รับแล้ว<br>(วัน)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n ok" id="c-claimed">0</div>
+        <div class="stat-lbl">เบิกค่า<br>เดินทางแล้ว</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n warn" id="c-remain">0</div>
+        <div class="stat-lbl">ยังไม่<br>ได้เบิก</div>
+      </div>
+    </div>
+
+    <!-- Add form -->
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('cf-body','cf-ico')">
+        <div class="card-title"><span>✏️</span> บันทึกวันใหม่</div>
+        <span class="card-icon" id="cf-ico">＋</span>
+      </div>
+      <div class="card-body" id="cf-body">
+        <div class="fg">
+          <label class="flbl">วันที่</label>
+          <div class="date-row">
+            <select class="finput dd" id="c-dd"></select>
+            <select class="finput mm" id="c-mm"></select>
+            <select class="finput yy" id="c-yy"></select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="flbl">สถานะการรับส่ง</label>
+          <div class="st-grid">
+            <div class="st-wrap">
+              <input type="checkbox" id="c-arr" checked>
+              <label class="st-lbl" for="c-arr">
+                <div class="st-dot">✓</div>ถึงโรงเรียนแล้ว
+              </label>
+            </div>
+            <div class="st-wrap">
+              <input type="checkbox" id="c-del" checked>
+              <label class="st-lbl" for="c-del">
+                <div class="st-dot">✓</div>ส่งเรียบร้อยแล้ว
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="flbl">รูปภาพ (ถ้ามี)</label>
+          <div class="photo-row">
+            <label class="photo-pick" for="c-photo-cam">📷 ถ่ายรูป</label>
+            <input type="file" id="c-photo-cam" accept="image/*" capture="environment" style="display:none"
+              onchange="pickPhoto(this,'c-prev','c')">
+            <label class="photo-pick" for="c-photo-lib" style="background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลังรูป</label>
+            <input type="file" id="c-photo-lib" accept="image/*" style="display:none"
+              onchange="pickPhoto(this,'c-prev','c')">
+            <img id="c-prev" class="photo-thumb" alt="">
+          </div>
+        </div>
+        <div class="fg">
+          <label class="flbl" for="c-notes">หมายเหตุ</label>
+          <textarea class="finput" id="c-notes" rows="2"
+            placeholder="บันทึกเพิ่มเติม..."></textarea>
+        </div>
+        <div class="fg">
+          <label class="claim-row">
+            <input type="checkbox" id="c-exp-claimed">
+            💰 เบิกค่าเดินทางวันนี้แล้ว
+          </label>
+        </div>
+        <button class="btn-pri" onclick="saveChild()">บันทึกข้อมูล</button>
+      </div>
+    </div>
+
+    <div class="divider"><span>ประวัติทั้งหมด</span></div>
+    <div class="hist" id="child-hist"></div>
+  </div>
+
+  <!-- ═══════════════ TAB 2 : ดูแลบ้าน ═══════════════ -->
+  <div class="tab-panel" id="panel-house">
+
+    <div class="stats-grid" style="margin-top:14px">
+      <div class="stat">
+        <div class="stat-n" id="h-total">0</div>
+        <div class="stat-lbl">ดูแลแล้ว<br>(วัน)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n ok" id="h-wage-ok">0</div>
+        <div class="stat-lbl">เบิกค่าแรง<br>แล้ว</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n warn" id="h-wage-pend">0</div>
+        <div class="stat-lbl">ค่าแรง<br>ค้างเบิก</div>
+      </div>
+    </div>
+
+    <!-- Expense money summary -->
+    <div class="card" style="margin-bottom:12px">
+      <div style="padding:12px 15px 14px">
+        <div class="stat-lbl" style="margin-bottom:9px;font-size:12px">
+          💳 สรุปค่าของที่ซื้อ (บาท)
+        </div>
+        <div class="stats-grid" style="margin-bottom:0">
+          <div class="stat">
+            <div class="stat-n ok money" id="h-exp-ok">0</div>
+            <div class="stat-lbl">เบิกแล้ว<br>(฿)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n warn money" id="h-exp-pend">0</div>
+            <div class="stat-lbl">ค้างเบิก<br>(฿)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n money" id="h-exp-all">0</div>
+            <div class="stat-lbl">ทั้งหมด<br>(฿)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add form -->
+    <div class="card">
+      <div class="card-head" onclick="toggleCard('hf-body','hf-ico')">
+        <div class="card-title"><span>✏️</span> บันทึกงานวันนี้</div>
+        <span class="card-icon" id="hf-ico">＋</span>
+      </div>
+      <div class="card-body" id="hf-body">
+        <div class="fg">
+          <label class="flbl">วันที่</label>
+          <div class="date-row">
+            <select class="finput dd" id="h-dd"></select>
+            <select class="finput mm" id="h-mm"></select>
+            <select class="finput yy" id="h-yy"></select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="flbl" for="h-desc">รายละเอียดงาน</label>
+          <textarea class="finput" id="h-desc" rows="2"
+            placeholder="เช่น ซ่อมก๊อกน้ำ, ทาสีรั้ว, ตัดหญ้า..."></textarea>
+        </div>
+        <div class="fg">
+          <label class="flbl">รูปภาพการทำงาน (สูงสุด 5 รูป)</label>
+          <div id="h-photo-rows"></div>
+          <button class="btn-add-exp" onclick="addPhotoRow()" id="h-add-photo-btn" style="margin-top:6px">
+            📷 เพิ่มรูปภาพ
+          </button>
+        </div>
+        <div class="fg">
+          <label class="claim-row">
+            <input type="checkbox" id="h-wage-in">
+            💰 เบิกค่าแรงวันนี้แล้ว
+          </label>
+        </div>
+        <div class="fg">
+          <label class="flbl">รายการค่าของที่ซื้อ</label>
+          <div id="h-exp-rows"></div>
+          <button class="btn-add-exp" onclick="addExpRow()" style="margin-top:6px">
+            ＋ เพิ่มรายการค่าของ
+          </button>
+        </div>
+        <button class="btn-pri" onclick="saveHouse()">บันทึกข้อมูล</button>
+      </div>
+    </div>
+
+    <div class="divider"><span>ประวัติทั้งหมด</span></div>
+    <div class="hist" id="house-hist"></div>
+  </div>
+
+<!-- ═══════ DELETE CONFIRM MODAL ═══════ -->
+<div class="modal-ov" id="confirm-del-modal" style="display:none">
+  <div class="modal-box" style="max-width:300px;padding:24px 20px;text-align:center">
+    <div style="font-size:32px;margin-bottom:10px">🗑</div>
+    <div style="font-weight:700;font-size:16px;color:var(--txt);margin-bottom:6px">ยืนยันการลบ</div>
+    <div style="font-size:13px;color:var(--txt2);margin-bottom:20px">บันทึกนี้จะถูกลบถาวร</div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-sec" style="flex:1" onclick="closeModal('confirm-del-modal')">ยกเลิก</button>
+      <button id="confirm-del-btn" class="btn-pri" style="flex:1;background:#e53935;border-color:#e53935">ลบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ CHILD EDIT MODAL ═══════ -->
+<div class="modal-ov" id="child-edit-modal" style="display:none"
+  onclick="if(event.target===this)closeModal('child-edit-modal')">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <span class="modal-title">✏️ แก้ไขบันทึก — รับลูก</span>
+      <button class="btn-close" onclick="closeModal('child-edit-modal')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg">
+        <label class="flbl">วันที่</label>
+        <div class="date-row">
+          <select class="finput dd" id="ce-dd"></select>
+          <select class="finput mm" id="ce-mm"></select>
+          <select class="finput yy" id="ce-yy"></select>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="flbl">สถานะ</label>
+        <div class="st-grid">
+          <div class="st-wrap">
+            <input type="checkbox" id="ce-arr">
+            <label class="st-lbl" for="ce-arr"><div class="st-dot">✓</div>ถึงโรงเรียนแล้ว</label>
+          </div>
+          <div class="st-wrap">
+            <input type="checkbox" id="ce-del">
+            <label class="st-lbl" for="ce-del"><div class="st-dot">✓</div>ส่งเรียบร้อยแล้ว</label>
+          </div>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="flbl">รูปภาพ</label>
+        <div class="photo-row">
+          <label class="photo-pick" for="ce-photo-cam" style="font-size:12px;padding:7px 12px">📷 ถ่าย</label>
+          <input type="file" id="ce-photo-cam" accept="image/*" capture="environment" style="display:none"
+            onchange="pickPhoto(this,'ce-prev','cedit')">
+          <label class="photo-pick" for="ce-photo-lib" style="font-size:12px;padding:7px 12px;background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลัง</label>
+          <input type="file" id="ce-photo-lib" accept="image/*" style="display:none"
+            onchange="pickPhoto(this,'ce-prev','cedit')">
+          <img id="ce-prev" class="photo-thumb" alt="">
+        </div>
+      </div>
+      <div class="fg">
+        <label class="flbl" for="ce-notes">หมายเหตุ</label>
+        <textarea class="finput" id="ce-notes" rows="2" placeholder="หมายเหตุ..."></textarea>
+      </div>
+      <div class="fg">
+        <label class="claim-row">
+          <input type="checkbox" id="ce-exp-claimed">💰 เบิกค่าเดินทางแล้ว
+        </label>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-pri" onclick="saveChildEdit()">บันทึกการแก้ไข</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ HOUSE EDIT MODAL ═══════ -->
+<div class="modal-ov" id="house-edit-modal" style="display:none"
+  onclick="if(event.target===this)closeModal('house-edit-modal')">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <span class="modal-title">✏️ แก้ไขบันทึก — ดูแลบ้าน</span>
+      <button class="btn-close" onclick="closeModal('house-edit-modal')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg">
+        <label class="flbl">วันที่</label>
+        <div class="date-row">
+          <select class="finput dd" id="he-dd"></select>
+          <select class="finput mm" id="he-mm"></select>
+          <select class="finput yy" id="he-yy"></select>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="flbl" for="he-desc">รายละเอียดงาน</label>
+        <textarea class="finput" id="he-desc" rows="2" placeholder="รายละเอียด..."></textarea>
+      </div>
+      <div class="fg">
+        <label class="flbl">รูปภาพ</label>
+        <div id="he-photo-existing"></div>
+        <div id="he-photo-new-rows"></div>
+        <button class="btn-add-exp" onclick="addEditPhotoRow()" style="margin-top:6px">📷 เพิ่มรูปภาพ</button>
+      </div>
+      <div class="fg">
+        <label class="claim-row">
+          <input type="checkbox" id="he-wage">💰 เบิกค่าแรงแล้ว
+        </label>
+      </div>
+      <div class="fg">
+        <label class="flbl">รายการค่าของ</label>
+        <div id="he-exp-rows"></div>
+        <button class="btn-add-exp" onclick="addEditExpRow(null)" style="margin-top:6px">＋ เพิ่มรายการค่าของ</button>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-pri" onclick="saveHouseEdit()">บันทึกการแก้ไข</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app-wrap -->
+
+<!-- ข้อมูล cloud sync — อย่าแก้ไข -->
+<script>var __D__=/*@@*/null/*@@*/;</script>
+
+<script>
+// ── DATA STORE ──────────────────────────────────────
+const STORE = 'baanAppV1';
+const FB_URL = 'https://baan-naay-default-rtdb.asia-southeast1.firebasedatabase.app/data.json';
+let db = { child:{ records:[] }, house:{ records:[] } };
+let _fbPushTimer = null;
+let _fbPollTimer = null;
+let _localTs = 0;
+let _syncing = false; // แสดงสถานะ sync บน UI
+
+function showSyncBadge(state){ // 'saving' | 'ok' | 'err' | ''
+  const el = document.getElementById('sync-badge');
+  if(!el) return;
+  if(state==='saving'){ el.textContent='⏳ กำลังบันทึก'; el.style.color='var(--txt2)'; }
+  else if(state==='ok'){ el.textContent='✅ บันทึกแล้ว'; el.style.color='green'; setTimeout(()=>showSyncBadge(''),3000); }
+  else if(state==='err'){ el.textContent='⚠️ ไม่สามารถ sync'; el.style.color='#e53935'; }
+  else{ el.textContent=''; }
+}
+
+function persist(){
+  db._ts = Date.now();
+  _localTs = db._ts;
+  try{ localStorage.setItem(STORE, JSON.stringify(db)) }
+  catch(e){ alert('⚠️ พื้นที่จัดเก็บเต็ม กรุณาลบบันทึกเก่าที่มีรูปภาพ') }
+  if(_fbPushTimer) clearTimeout(_fbPushTimer);
+  _fbPushTimer = setTimeout(pushToFB, 1500);
+  showSyncBadge('saving');
+}
+
+async function pushToFB(){
+  _fbPushTimer = null; // ← clear reference ก่อน ไม่งั้น pollFB จะ skip ตลอด
+  try{
+    const res = await fetch(FB_URL, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(db)
+    });
+    if(res.ok) showSyncBadge('ok');
+    else showSyncBadge('err');
+  }catch(e){ showSyncBadge('err'); }
+}
+
+async function pullFromFB(){
+  try{
+    const res = await fetch(FB_URL + '?ts=' + Date.now());
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(data && data.child) return data;
+  }catch(e){}
+  return null;
+}
+
+async function pollFB(){
+  if(_fbPushTimer) { _fbPollTimer = setTimeout(pollFB, 30000); return; } // ถ้ากำลัง push อยู่ รอก่อน
+  try{
+    const fbData = await pullFromFB();
+    if(fbData && (fbData._ts||0) > _localTs){
+      db = fbData;
+      _localTs = db._ts || 0;
+      try{ localStorage.setItem(STORE, JSON.stringify(db)); }catch(e){}
+      renderChild();
+      renderHouse();
+    }
+  }catch(e){}
+  _fbPollTimer = setTimeout(pollFB, 10000); // poll ทุก 10 วินาที
+}
+
+async function hydrate(){
+  // 1. ดึงจาก Firebase ก่อน — ข้อมูลล่าสุดจากทุกเครื่อง
+  const fbData = await pullFromFB();
+  if(fbData){
+    // ถ้า localStorage มีข้อมูลใหม่กว่า Firebase ให้เอา local ขึ้น Firebase แทน
+    let localDb = null;
+    try{
+      const s = localStorage.getItem(STORE);
+      if(s) localDb = JSON.parse(s);
+    }catch(e){}
+    if(localDb && (localDb._ts||0) > (fbData._ts||0)){
+      db = localDb;
+      _localTs = db._ts || 0;
+      await pushToFB();
+    } else {
+      db = fbData;
+      _localTs = db._ts || 0;
+      try{ localStorage.setItem(STORE, JSON.stringify(db)); }catch(e){}
+    }
+    return;
+  }
+  // 2. fallback: __D__ (ข้อมูลเก่าจาก artifact sync)
+  try{
+    if(typeof __D__ !== 'undefined' && __D__ && __D__.child){
+      db = __D__;
+      _localTs = db._ts || 0;
+      await pushToFB(); // migrate ไป Firebase
+      return;
+    }
+  }catch(e){}
+  // 3. fallback: localStorage
+  try{
+    const s = localStorage.getItem(STORE);
+    if(s){
+      db = JSON.parse(s);
+      _localTs = db._ts || 0;
+      await pushToFB(); // migrate ไป Firebase
+    }
+  }catch(e){}
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5) }
+
+// ── PHOTO ───────────────────────────────────────────
+const photos = { c:null, h:null };
+
+function pickPhoto(input, prevId, key){
+  const file = input.files[0];
+  if(!file) return;
+  shrinkImage(file, b64 => {
+    photos[key] = b64;
+    const el = document.getElementById(prevId);
+    el.src = b64; el.style.display = 'block';
+  });
+}
+
+function shrinkImage(file, cb){
+  const rd = new FileReader();
+  rd.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 900;
+      let [w,h] = [img.width, img.height];
+      if(w > h && w > MAX){ h = Math.round(h*MAX/w); w = MAX; }
+      else if(h >= w && h > MAX){ w = Math.round(w*MAX/h); h = MAX; }
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      cb(cv.toDataURL('image/jpeg',0.72));
+    };
+    img.src = ev.target.result;
+  };
+  rd.readAsDataURL(file);
+}
+
+// ── TABS ────────────────────────────────────────────
+function switchTab(tab){
+  ['child','house'].forEach(t => {
+    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+    document.getElementById('tbtn-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+// ── CARD TOGGLE ─────────────────────────────────────
+function toggleCard(bodyId, icoId){
+  const body = document.getElementById(bodyId);
+  const ico  = document.getElementById(icoId);
+  const open = body.classList.toggle('open');
+  ico.textContent = open ? '－' : '＋';
+  ico.classList.toggle('open', open);
+}
+
+// ── DATE UTILS ──────────────────────────────────────
+function today(){ return new Date().toISOString().split('T')[0] }
+
+const TH_MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+  'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+function buildDateSels(pfx){
+  const dd = document.getElementById(pfx+'-dd');
+  const mm = document.getElementById(pfx+'-mm');
+  const yy = document.getElementById(pfx+'-yy');
+  if(!dd||!mm||!yy) return;
+  dd.innerHTML = '<option value="">วัน</option>';
+  for(let d=1;d<=31;d++){const o=new Option(d,String(d).padStart(2,'0'));dd.add(o);}
+  mm.innerHTML = '<option value="">เดือน</option>';
+  TH_MONTHS.forEach((m,i)=>{const o=new Option(m,String(i+1).padStart(2,'0'));mm.add(o);});
+  yy.innerHTML = '<option value="">ปี</option>';
+  const yr = new Date().getFullYear();
+  for(let y=yr-3;y<=yr+1;y++){const o=new Option((y+543)+' ('+y+')',y);yy.add(o);}
+}
+
+function setDP(pfx, ymd){ // ตั้งค่า date picker จาก YYYY-MM-DD
+  if(!ymd) return;
+  const p = ymd.split('-');
+  if(p.length<3) return;
+  const dd=document.getElementById(pfx+'-dd');
+  const mm=document.getElementById(pfx+'-mm');
+  const yy=document.getElementById(pfx+'-yy');
+  if(dd) dd.value = p[2];
+  if(mm) mm.value = p[1];
+  if(yy) yy.value = p[0];
+}
+
+function getDP(pfx){ // อ่านค่า date picker เป็น YYYY-MM-DD
+  const d=document.getElementById(pfx+'-dd').value;
+  const m=document.getElementById(pfx+'-mm').value;
+  const y=document.getElementById(pfx+'-yy').value;
+  if(!d||!m||!y) return '';
+  return y+'-'+m+'-'+d;
+}
+
+function thDate(str){
+  if(!str) return '';
+  return new Date(str+'T12:00:00').toLocaleDateString('th-TH',{
+    weekday:'short', year:'numeric', month:'short', day:'numeric'
+  });
+}
+function thNum(n){ return Number(n).toLocaleString('th-TH') }
+
+// ── TAB 1 : CHILD ───────────────────────────────────
+function saveChild(){
+  const date = getDP('c');
+  if(!date){ alert('กรุณาเลือกวันที่'); return; }
+  db.child.records.unshift({
+    id: uid(), date,
+    arrived:  document.getElementById('c-arr').checked,
+    delivered:document.getElementById('c-del').checked,
+    photo:    photos.c,
+    notes:    document.getElementById('c-notes').value.trim(),
+    expClaimed: document.getElementById('c-exp-claimed').checked
+  });
+  persist();
+  resetChildForm();
+  renderChild();
+}
+
+function resetChildForm(){
+  setDP('c', today());
+  document.getElementById('c-arr').checked = true;
+  document.getElementById('c-del').checked = true;
+  document.getElementById('c-notes').value = '';
+  document.getElementById('c-exp-claimed').checked = false;
+  document.getElementById('c-photo-cam').value = '';
+  document.getElementById('c-photo-lib').value = '';
+  const prev = document.getElementById('c-prev');
+  prev.src = ''; prev.style.display = 'none';
+  photos.c = null;
+  const body = document.getElementById('cf-body');
+  const ico  = document.getElementById('cf-ico');
+  body.classList.remove('open');
+  ico.textContent = '＋'; ico.classList.remove('open');
+}
+
+function delChild(id){
+  const btn = document.getElementById('confirm-del-btn');
+  btn.onclick = () => {
+    db.child.records = db.child.records.filter(r => r.id !== id);
+    persist(); renderChild(); closeModal('confirm-del-modal');
+  };
+  showModal('confirm-del-modal');
+}
+
+function toggleChildClaim(id){
+  const r = db.child.records.find(r => r.id === id);
+  if(r){ r.expClaimed = !r.expClaimed; persist(); renderChild(); }
+}
+
+function renderChild(){
+  const recs = db.child.records;
+  const total   = recs.length;
+  const claimed = recs.filter(r => r.expClaimed).length;
+  document.getElementById('c-total').textContent   = total;
+  document.getElementById('c-claimed').textContent = claimed;
+  document.getElementById('c-remain').textContent  = total - claimed;
+
+  const hist = document.getElementById('child-hist');
+  if(!recs.length){
+    hist.innerHTML = `<div class="empty"><div class="ico">📭</div><p>ยังไม่มีบันทึก<br>กด "บันทึกวันใหม่" เพื่อเริ่มต้น</p></div>`;
+    return;
+  }
+  const sorted = [...recs].sort((a,b) => b.date.localeCompare(a.date));
+  hist.innerHTML = sorted.map(r => `
+    <div class="rec">
+      <div class="rec-head">
+        <div style="flex:1;min-width:0">
+          <div class="rec-date">📅 ${thDate(r.date)}</div>
+          <div class="rec-tags">
+            <span class="tag ${r.arrived  ?'tag-ok':'tag-no'}">${r.arrived  ?'✅':'❌'} ถึงโรงเรียน</span>
+            <span class="tag ${r.delivered?'tag-ok':'tag-no'}">${r.delivered?'✅':'❌'} ส่งเรียบร้อย</span>
+            <span class="tag ${r.expClaimed?'tag-claim':'tag-pending'}">
+              ${r.expClaimed?'💰 เบิกแล้ว':'⏳ ยังไม่ได้เบิก'}
+            </span>
+          </div>
+        </div>
+        <div class="rec-actions">
+          <button class="btn-edit" onclick="openChildEdit('${r.id}')" title="แก้ไข">✏️</button>
+          <button class="btn-del" onclick="delChild('${r.id}')" title="ลบ">🗑</button>
+          <button class="btn-toggle" onclick="toggleChildClaim('${r.id}')">
+            ${r.expClaimed?'ยกเลิกเบิก':'เบิกค่าเดินทาง'}
+          </button>
+        </div>
+      </div>
+      ${r.photo ?`<img class="rec-photo" src="${r.photo}" alt="รูป ${thDate(r.date)}">` :''}
+      ${r.notes ?`<div class="rec-note">📝 ${r.notes}</div>` :''}
+    </div>
+  `).join('');
+}
+
+// ── TAB 2 : HOUSE ───────────────────────────────────
+function addExpRow(){
+  const id = uid();
+  const container = document.getElementById('h-exp-rows');
+  const row = document.createElement('div');
+  row.className = 'exp-form-row';
+  row.id = 'er-'+id;
+  row.innerHTML = `
+    <input class="exp-name-in" type="text" placeholder="ชื่อของ เช่น ก๊อกน้ำ">
+    <input class="exp-amt-in" type="number" placeholder="฿ 0" min="0" step="1">
+    <button class="btn-del-sm" onclick="this.closest('.exp-form-row').remove()" title="ลบ">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+function readExpRows(){
+  const rows = document.querySelectorAll('#h-exp-rows .exp-form-row');
+  const result = [];
+  rows.forEach(row => {
+    const item = row.querySelector('.exp-name-in').value.trim();
+    const amt  = parseFloat(row.querySelector('.exp-amt-in').value)||0;
+    if(item) result.push({ id:uid(), item, amount:amt, claimed:false });
+  });
+  return result;
+}
+
+function saveHouse(){
+  const date = getDP('h');
+  if(!date){ alert('กรุณาเลือกวันที่'); return; }
+  db.house.records.unshift({
+    id: uid(), date,
+    desc:    document.getElementById('h-desc').value.trim(),
+    photos:  readPhotoRows(),
+    wageClaimed: document.getElementById('h-wage-in').checked,
+    expenses: readExpRows()
+  });
+  persist();
+  resetHouseForm();
+  renderHouse();
+}
+
+function resetHouseForm(){
+  setDP('h', today());
+  document.getElementById('h-desc').value = '';
+  document.getElementById('h-wage-in').checked = false;
+  photoEntries.clear();
+  document.getElementById('h-photo-rows').innerHTML = '';
+  document.getElementById('h-exp-rows').innerHTML = '';
+  const body = document.getElementById('hf-body');
+  const ico  = document.getElementById('hf-ico');
+  body.classList.remove('open');
+  ico.textContent = '＋'; ico.classList.remove('open');
+}
+
+function delHouse(id){
+  const btn = document.getElementById('confirm-del-btn');
+  btn.onclick = () => {
+    db.house.records = db.house.records.filter(r => r.id !== id);
+    persist(); renderHouse(); closeModal('confirm-del-modal');
+  };
+  showModal('confirm-del-modal');
+}
+
+function toggleWage(id){
+  const r = db.house.records.find(r => r.id === id);
+  if(r){ r.wageClaimed = !r.wageClaimed; persist(); renderHouse(); }
+}
+
+function toggleExpClaim(recId, expId){
+  const r = db.house.records.find(r => r.id === recId);
+  if(!r) return;
+  const e = r.expenses.find(e => e.id === expId);
+  if(e){ e.claimed = !e.claimed; persist(); renderHouse(); }
+}
+
+function renderHouse(){
+  const recs = db.house.records;
+  const total      = recs.length;
+  const wageClaimed= recs.filter(r=>r.wageClaimed).length;
+  document.getElementById('h-total').textContent     = total;
+  document.getElementById('h-wage-ok').textContent   = wageClaimed;
+  document.getElementById('h-wage-pend').textContent = total - wageClaimed;
+
+  let expOk=0, expPend=0;
+  recs.forEach(r => r.expenses.forEach(e => {
+    if(e.claimed) expOk   += e.amount;
+    else          expPend += e.amount;
+  }));
+  document.getElementById('h-exp-ok').textContent   = thNum(expOk);
+  document.getElementById('h-exp-pend').textContent = thNum(expPend);
+  document.getElementById('h-exp-all').textContent  = thNum(expOk+expPend);
+
+  const hist = document.getElementById('house-hist');
+  if(!recs.length){
+    hist.innerHTML = `<div class="empty"><div class="ico">🔧</div><p>ยังไม่มีบันทึก<br>กด "บันทึกงานวันนี้" เพื่อเริ่มต้น</p></div>`;
+    return;
+  }
+  const sorted = [...recs].sort((a,b) => b.date.localeCompare(a.date));
+  hist.innerHTML = sorted.map(r => {
+    const totalExp   = r.expenses.reduce((s,e)=>s+e.amount,0);
+    const claimedExp = r.expenses.filter(e=>e.claimed).reduce((s,e)=>s+e.amount,0);
+    return `
+      <div class="rec">
+        <div class="rec-head">
+          <div style="flex:1;min-width:0">
+            <div class="rec-date">📅 ${thDate(r.date)}</div>
+            ${r.desc ? `<div style="font-size:13px;color:var(--tb);margin-top:4px;line-height:1.4">🔧 ${r.desc}</div>` : ''}
+            <div class="rec-tags">
+              <span class="tag ${r.wageClaimed?'tag-ok':'tag-pending'}">
+                ${r.wageClaimed?'✅ เบิกค่าแรงแล้ว':'⏳ ยังไม่ได้เบิกค่าแรง'}
+              </span>
+              ${totalExp>0?`<span class="tag tag-claim">💳 ค่าของ ${thNum(claimedExp)}/${thNum(totalExp)} ฿</span>`:''}
+            </div>
+          </div>
+          <div class="rec-actions">
+            <button class="btn-edit" onclick="openHouseEdit('${r.id}')" title="แก้ไข">✏️</button>
+            <button class="btn-del" onclick="delHouse('${r.id}')" title="ลบ">🗑</button>
+            <button class="btn-toggle" onclick="toggleWage('${r.id}')">
+              ${r.wageClaimed?'ยกเลิกเบิก':'เบิกค่าแรง'}
+            </button>
+          </div>
+        </div>
+        ${(()=>{
+          if(r.photos && r.photos.length){
+            return r.photos.map(p=>`
+              <div style="border-top:1px solid var(--border)">
+                <img src="${p.src}" style="width:100%;max-height:220px;object-fit:cover;display:block" alt="">
+                ${p.caption?`<div style="padding:8px 14px;font-size:13px;color:var(--ts);background:var(--bg)">📝 ${p.caption}</div>`:''}
+              </div>`).join('');
+          } else if(r.photo){
+            return `<img class="rec-photo" src="${r.photo}" alt="">`;
+          }
+          return '';
+        })()}
+        ${r.expenses.length?`
+          <div class="exp-zone">
+            <div class="exp-zone-lbl">รายการค่าของ</div>
+            <div class="exp-list">
+              ${r.expenses.map(e=>`
+                <div class="exp-row">
+                  <span class="exp-name">${e.item}</span>
+                  <span class="exp-amt" id="ea-${r.id}-${e.id}"
+                    onclick="editExpAmt('${r.id}','${e.id}',${e.amount})"
+                    title="แตะเพื่อแก้ยอด" style="cursor:pointer;text-decoration:underline dotted">
+                    ฿ ${thNum(e.amount)}
+                  </span>
+                  <span class="tag exp-tag ${e.claimed?'tag-ok':'tag-pending'}"
+                    onclick="toggleExpClaim('${r.id}','${e.id}')"
+                    title="แตะเพื่อเปลี่ยนสถานะ">
+                    ${e.claimed?'✅ เบิกแล้ว':'⏳ ค้างเบิก'}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `:''}
+      </div>
+    `;
+  }).join('');
+}
+
+// ── MODAL HELPERS ────────────────────────────────────
+function showModal(id){ document.getElementById(id).style.display='flex'; document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById(id).style.display='none'; document.body.style.overflow=''; }
+
+// ── CHILD EDIT ────────────────────────────────────────
+let editingChildId = null;
+
+function openChildEdit(id){
+  const r = db.child.records.find(r=>r.id===id); if(!r) return;
+  editingChildId = id;
+  setDP('ce', r.date);
+  document.getElementById('ce-arr').checked  = r.arrived;
+  document.getElementById('ce-del').checked  = r.delivered;
+  document.getElementById('ce-notes').value  = r.notes||'';
+  document.getElementById('ce-exp-claimed').checked = r.expClaimed;
+  photos.cedit = r.photo||null;
+  document.getElementById('ce-photo-cam').value = '';
+  document.getElementById('ce-photo-lib').value = '';
+  const prev = document.getElementById('ce-prev');
+  if(r.photo){ prev.src=r.photo; prev.style.display='block'; }
+  else { prev.src=''; prev.style.display='none'; }
+  showModal('child-edit-modal');
+}
+
+function saveChildEdit(){
+  const r = db.child.records.find(r=>r.id===editingChildId); if(!r) return;
+  const date = getDP('ce');
+  if(!date){ alert('กรุณาเลือกวันที่'); return; }
+  r.date      = date;
+  r.arrived   = document.getElementById('ce-arr').checked;
+  r.delivered = document.getElementById('ce-del').checked;
+  r.notes     = document.getElementById('ce-notes').value.trim();
+  r.expClaimed= document.getElementById('ce-exp-claimed').checked;
+  r.photo     = photos.cedit;
+  persist(); closeModal('child-edit-modal'); renderChild();
+}
+
+// ── HOUSE EDIT ────────────────────────────────────────
+let editingHouseId = null;
+const editPhotoEntries = new Map();
+let editExistingPhotos = [];
+
+function openHouseEdit(id){
+  const r = db.house.records.find(r=>r.id===id); if(!r) return;
+  editingHouseId = id;
+  setDP('he', r.date);
+  document.getElementById('he-desc').value  = r.desc||'';
+  document.getElementById('he-wage').checked= r.wageClaimed;
+  // Photos
+  editExistingPhotos = (r.photos||[]).map(p=>({...p, removed:false}));
+  if(r.photo && !(r.photos&&r.photos.length)) editExistingPhotos = [{id:uid(),src:r.photo,caption:'',removed:false}];
+  renderEditExistingPhotos();
+  editPhotoEntries.clear();
+  document.getElementById('he-photo-new-rows').innerHTML='';
+  // Expenses
+  document.getElementById('he-exp-rows').innerHTML='';
+  (r.expenses||[]).forEach(e=>addEditExpRow(e));
+  showModal('house-edit-modal');
+}
+
+function renderEditExistingPhotos(){
+  document.getElementById('he-photo-existing').innerHTML = editExistingPhotos.map((p,i)=> p.removed?'' : `
+    <div style="position:relative;margin-bottom:8px;border-radius:9px;overflow:hidden;border:1px solid var(--border)">
+      <img src="${p.src}" style="width:100%;max-height:130px;object-fit:cover;display:block" alt="">
+      ${p.caption?`<div style="padding:5px 11px;font-size:12px;color:var(--ts);background:var(--bg)">${p.caption}</div>`:''}
+      <button onclick="removeEditExistingPhoto(${i})"
+        style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:12px;cursor:pointer">✕</button>
+    </div>`).join('');
+}
+
+function removeEditExistingPhoto(i){ editExistingPhotos[i].removed=true; renderEditExistingPhotos(); }
+
+function addEditPhotoRow(){
+  const kept = editExistingPhotos.filter(p=>!p.removed).length;
+  if(kept + editPhotoEntries.size >= 5){ alert('เพิ่มรูปได้สูงสุด 5 รูป'); return; }
+  const id = uid();
+  editPhotoEntries.set(id, {src:null, caption:''});
+  const wrap = document.createElement('div');
+  wrap.className='ph-entry'; wrap.id='ep-row-'+id;
+  wrap.style.cssText='margin-bottom:8px;border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;background:var(--surface)';
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;flex-wrap:wrap">
+      <label class="photo-pick" for="ep-cam-${id}" style="padding:6px 10px;font-size:12px;flex-shrink:0">📷 ถ่าย</label>
+      <input type="file" id="ep-cam-${id}" accept="image/*" capture="environment" style="display:none" onchange="pickEditPhoto(this,'${id}')">
+      <label class="photo-pick" for="ep-lib-${id}" style="padding:6px 10px;font-size:12px;flex-shrink:0;background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลัง</label>
+      <input type="file" id="ep-lib-${id}" accept="image/*" style="display:none" onchange="pickEditPhoto(this,'${id}')">
+      <input type="text" class="finput" placeholder="อธิบายงาน..." id="ep-cap-${id}"
+        style="flex:1;padding:7px 10px;font-size:13px" oninput="editPhotoEntries.get('${id}').caption=this.value">
+      <button class="btn-del-sm" onclick="removeEditPhotoRow('${id}')">✕</button>
+    </div>
+    <img id="ep-prev-${id}" style="display:none;width:100%;max-height:130px;object-fit:cover" alt="">`;
+  document.getElementById('he-photo-new-rows').appendChild(wrap);
+}
+
+function pickEditPhoto(input, id){
+  const file=input.files[0]; if(!file) return;
+  shrinkImage(file, b64=>{ const e=editPhotoEntries.get(id); if(e) e.src=b64;
+    const p=document.getElementById('ep-prev-'+id); if(p){p.src=b64;p.style.display='block';} });
+}
+function removeEditPhotoRow(id){ editPhotoEntries.delete(id); const r=document.getElementById('ep-row-'+id); if(r)r.remove(); }
+
+function addEditExpRow(existing){
+  const id = existing?existing.id:uid();
+  const container = document.getElementById('he-exp-rows');
+  const row = document.createElement('div');
+  row.className='exp-form-row'; row.id='her-'+id;
+  row.dataset.id=id; row.dataset.claimed=existing?String(existing.claimed):'false';
+  row.innerHTML=`
+    <input class="exp-name-in" type="text" placeholder="ชื่อของ" value="${existing?existing.item:''}">
+    <input class="exp-amt-in" type="number" placeholder="฿ 0" min="0" value="${existing?existing.amount:''}">
+    <button class="btn-del-sm" onclick="this.closest('.exp-form-row').remove()">✕</button>`;
+  container.appendChild(row);
+}
+
+function saveHouseEdit(){
+  const r=db.house.records.find(r=>r.id===editingHouseId); if(!r) return;
+  const date=getDP('he');
+  if(!date){alert('กรุณาเลือกวันที่');return;}
+  r.date=date;
+  r.desc=document.getElementById('he-desc').value.trim();
+  r.wageClaimed=document.getElementById('he-wage').checked;
+  // Photos
+  const kept=editExistingPhotos.filter(p=>!p.removed).map(p=>({id:p.id,src:p.src,caption:p.caption}));
+  const added=[]; editPhotoEntries.forEach((v,id)=>{if(v.src)added.push({id,src:v.src,caption:v.caption||''});});
+  r.photos=[...kept,...added]; r.photo=null;
+  // Expenses
+  const rows=document.querySelectorAll('#he-exp-rows .exp-form-row');
+  r.expenses=[];
+  rows.forEach(row=>{
+    const item=row.querySelector('.exp-name-in').value.trim();
+    const amt=parseFloat(row.querySelector('.exp-amt-in').value)||0;
+    if(item) r.expenses.push({id:row.dataset.id,item,amount:amt,claimed:row.dataset.claimed==='true'});
+  });
+  persist(); closeModal('house-edit-modal'); renderHouse();
+}
+
+// ── MULTI-PHOTO (house) ──────────────────────────────
+const photoEntries = new Map(); // id → { src, caption }
+
+function addPhotoRow(){
+  const rows = document.querySelectorAll('#h-photo-rows .ph-entry');
+  if(rows.length >= 5){ alert('เพิ่มรูปได้สูงสุด 5 รูป'); return; }
+  const id = uid();
+  photoEntries.set(id, { src:null, caption:'' });
+  const wrap = document.createElement('div');
+  wrap.className = 'ph-entry';
+  wrap.id = 'ph-row-'+id;
+  wrap.style.cssText = 'margin-bottom:10px;border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;background:var(--surface)';
+  wrap.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 10px;flex-wrap:wrap">
+      <label class="photo-pick" for="ph-cam-${id}" style="padding:7px 11px;font-size:12px;flex-shrink:0">📷 ถ่าย</label>
+      <input type="file" id="ph-cam-${id}" accept="image/*" capture="environment" style="display:none"
+        onchange="pickEntryPhoto(this,'${id}')">
+      <label class="photo-pick" for="ph-lib-${id}" style="padding:7px 11px;font-size:12px;flex-shrink:0;background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลัง</label>
+      <input type="file" id="ph-lib-${id}" accept="image/*" style="display:none"
+        onchange="pickEntryPhoto(this,'${id}')">
+      <input type="text" class="finput" placeholder="อธิบายงาน..." id="ph-cap-${id}"
+        style="flex:1;padding:7px 10px;font-size:13px"
+        oninput="photoEntries.get('${id}').caption=this.value">
+      <button class="btn-del-sm" onclick="removePhotoRow('${id}')" title="ลบ">✕</button>
+    </div>
+    <img id="ph-prev-${id}" style="display:none;width:100%;max-height:160px;object-fit:cover" alt="">
+  `;
+  document.getElementById('h-photo-rows').appendChild(wrap);
+}
+
+function pickEntryPhoto(input, id){
+  const file = input.files[0];
+  if(!file) return;
+  shrinkImage(file, b64 => {
+    const e = photoEntries.get(id);
+    if(e) e.src = b64;
+    const prev = document.getElementById('ph-prev-'+id);
+    if(prev){ prev.src = b64; prev.style.display = 'block'; }
+  });
+}
+
+function removePhotoRow(id){
+  photoEntries.delete(id);
+  const row = document.getElementById('ph-row-'+id);
+  if(row) row.remove();
+}
+
+function readPhotoRows(){
+  const result = [];
+  photoEntries.forEach((val, id) => {
+    if(val.src) result.push({ id, src:val.src, caption:val.caption||'' });
+  });
+  return result;
+}
+
+// ── INLINE EXPENSE EDIT ──────────────────────────────
+function editExpAmt(recId, expId, current){
+  const span = document.getElementById('ea-'+recId+'-'+expId);
+  if(!span) return;
+  const inp = document.createElement('input');
+  inp.type = 'number'; inp.value = current; inp.min = '0';
+  inp.style.cssText = 'width:72px;padding:2px 6px;border:1.5px solid var(--p-mid);border-radius:5px;font-family:Kanit,sans-serif;font-size:13px;font-weight:600;color:var(--th);background:var(--bg);outline:none;text-align:right';
+  span.replaceWith(inp);
+  inp.focus(); inp.select();
+  const commit = () => {
+    const r = db.house.records.find(r => r.id === recId);
+    if(r){ const ex = r.expenses.find(e => e.id === expId); if(ex){ ex.amount = parseFloat(inp.value)||0; persist(); renderHouse(); } }
+  };
+  inp.addEventListener('blur', commit);
+  inp.addEventListener('keydown', ev => { if(ev.key==='Enter'){ ev.preventDefault(); inp.blur(); } });
+}
+
+// ── INIT ─────────────────────────────────────────────
+(async function(){
+  // สร้าง date selects ก่อน
+  ['c','h','ce','he'].forEach(buildDateSels);
+  await hydrate();
+  setDP('c', today());
+  setDP('h', today());
+  renderChild();
+  renderHouse();
+  // poll ทุก 10 วินาที
+  _fbPollTimer = setTimeout(pollFB, 10000);
+  // poll ทันทีเมื่อกลับมาที่แอพ (เปิดแท็บ / กลับจาก LINE)
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState==='visible'){
+      if(_fbPollTimer) clearTimeout(_fbPollTimer);
+      pollFB();
+    }
+  });
+})();
+</script>
