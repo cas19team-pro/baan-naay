@@ -368,6 +368,17 @@ img{max-width:100%;display:block}
 /* ── HISTORY LIST ── */
 .hist{display:flex;flex-direction:column}
 
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1B5E20;color:#fff;
+  padding:10px 20px;border-radius:24px;
+  font-size:14px;font-weight:600;
+  opacity:0;transition:opacity .25s,transform .25s;
+  pointer-events:none;z-index:500;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 /* ── MODAL ── */
 .modal-ov{
   position:fixed;inset:0;z-index:200;
@@ -603,6 +614,8 @@ img{max-width:100%;display:block}
     <div class="divider"><span>ประวัติทั้งหมด</span></div>
     <div class="hist" id="house-hist"></div>
   </div>
+
+<div id="toast"></div>
 
 <!-- ═══════ DELETE CONFIRM MODAL ═══════ -->
 <div class="modal-ov" id="confirm-del-modal" style="display:none">
@@ -934,17 +947,22 @@ function thNum(n){ return Number(n).toLocaleString('th-TH') }
 function saveChild(){
   const date = getDP('c');
   if(!date){ alert('กรุณาเลือกวันที่'); return; }
-  db.child.records.unshift({
-    id: uid(), date,
-    arrived:  document.getElementById('c-arr').checked,
-    delivered:document.getElementById('c-del').checked,
-    photo:    photos.c,
-    notes:    document.getElementById('c-notes').value.trim(),
-    expClaimed: document.getElementById('c-exp-claimed').checked
-  });
-  persist();
-  resetChildForm();
-  renderChild();
+  try{
+    db.child.records.unshift({
+      id: uid(), date,
+      arrived:  document.getElementById('c-arr').checked,
+      delivered:document.getElementById('c-del').checked,
+      photo:    photos.c,
+      notes:    document.getElementById('c-notes').value.trim(),
+      expClaimed: document.getElementById('c-exp-claimed').checked
+    });
+    persist();
+    resetChildForm();
+    renderChild();
+    showToast('✅ บันทึกข้อมูลแล้ว');
+  }catch(err){
+    alert('เกิดข้อผิดพลาด: '+err.message);
+  }
 }
 
 function resetChildForm(){
@@ -1048,16 +1066,21 @@ function readExpRows(){
 function saveHouse(){
   const date = getDP('h');
   if(!date){ alert('กรุณาเลือกวันที่'); return; }
-  db.house.records.unshift({
-    id: uid(), date,
-    desc:    document.getElementById('h-desc').value.trim(),
-    photos:  readPhotoRows(),
-    wageClaimed: document.getElementById('h-wage-in').checked,
-    expenses: readExpRows()
-  });
-  persist();
-  resetHouseForm();
-  renderHouse();
+  try{
+    db.house.records.unshift({
+      id: uid(), date,
+      desc:    document.getElementById('h-desc').value.trim(),
+      photos:  readPhotoRows(),
+      wageClaimed: document.getElementById('h-wage-in').checked,
+      expenses: readExpRows()
+    });
+    persist();
+    resetHouseForm();
+    renderHouse();
+    showToast('✅ บันทึกข้อมูลแล้ว');
+  }catch(err){
+    alert('เกิดข้อผิดพลาด: '+err.message);
+  }
 }
 
 function resetHouseForm(){
@@ -1103,7 +1126,7 @@ function renderHouse(){
   document.getElementById('h-wage-pend').textContent = total - wageClaimed;
 
   let expOk=0, expPend=0;
-  recs.forEach(r => r.expenses.forEach(e => {
+  recs.forEach(r => (r.expenses||[]).forEach(e => {
     if(e.claimed) expOk   += e.amount;
     else          expPend += e.amount;
   }));
@@ -1118,8 +1141,9 @@ function renderHouse(){
   }
   const sorted = [...recs].sort((a,b) => b.date.localeCompare(a.date));
   hist.innerHTML = sorted.map(r => {
-    const totalExp   = r.expenses.reduce((s,e)=>s+e.amount,0);
-    const claimedExp = r.expenses.filter(e=>e.claimed).reduce((s,e)=>s+e.amount,0);
+    const exps       = r.expenses || [];
+    const totalExp   = exps.reduce((s,e)=>s+e.amount,0);
+    const claimedExp = exps.filter(e=>e.claimed).reduce((s,e)=>s+e.amount,0);
     return `
       <div class="rec">
         <div class="rec-head">
@@ -1153,11 +1177,11 @@ function renderHouse(){
           }
           return '';
         })()}
-        ${r.expenses.length?`
+        ${exps.length?`
           <div class="exp-zone">
             <div class="exp-zone-lbl">รายการค่าของ</div>
             <div class="exp-list">
-              ${r.expenses.map(e=>`
+              ${exps.map(e=>`
                 <div class="exp-row">
                   <span class="exp-name">${e.item}</span>
                   <span class="exp-amt" id="ea-${r.id}-${e.id}"
@@ -1178,6 +1202,17 @@ function renderHouse(){
       </div>
     `;
   }).join('');
+}
+
+// ── TOAST ────────────────────────────────────────────
+let _toastTimer = null;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  if(_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>{ el.classList.remove('show'); }, 2500);
 }
 
 // ── MODAL HELPERS ────────────────────────────────────
