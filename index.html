@@ -794,7 +794,7 @@ async function pollFB(){
   try{
     const fbData = await pullFromFB();
     if(fbData && (fbData._ts||0) > _localTs){
-      db = fbData;
+      db = normalizeDb(fbData);
       _localTs = db._ts || 0;
       try{ localStorage.setItem(STORE, JSON.stringify(db)); }catch(e){}
       renderChild();
@@ -815,11 +815,11 @@ async function hydrate(){
       if(s) localDb = JSON.parse(s);
     }catch(e){}
     if(localDb && (localDb._ts||0) > (fbData._ts||0)){
-      db = localDb;
+      db = normalizeDb(localDb);
       _localTs = db._ts || 0;
       await pushToFB();
     } else {
-      db = fbData;
+      db = normalizeDb(fbData);
       _localTs = db._ts || 0;
       try{ localStorage.setItem(STORE, JSON.stringify(db)); }catch(e){}
     }
@@ -828,7 +828,7 @@ async function hydrate(){
   // 2. fallback: __D__ (ข้อมูลเก่าจาก artifact sync)
   try{
     if(typeof __D__ !== 'undefined' && __D__ && __D__.child){
-      db = __D__;
+      db = normalizeDb(__D__);
       _localTs = db._ts || 0;
       await pushToFB(); // migrate ไป Firebase
       return;
@@ -838,12 +838,22 @@ async function hydrate(){
   try{
     const s = localStorage.getItem(STORE);
     if(s){
-      db = JSON.parse(s);
+      db = normalizeDb(JSON.parse(s));
       _localTs = db._ts || 0;
       await pushToFB(); // migrate ไป Firebase
     }
   }catch(e){}
 }
+// ── ตรวจสอบ/ซ่อม structure ของ db ทุกครั้งที่โหลดข้อมูลจากภายนอก ──
+function normalizeDb(data){
+  if(!data || typeof data !== 'object') data = {};
+  if(!data.child  || typeof data.child  !== 'object') data.child  = { records:[] };
+  if(!Array.isArray(data.child.records))  data.child.records  = [];
+  if(!data.house  || typeof data.house  !== 'object') data.house  = { records:[] };
+  if(!Array.isArray(data.house.records))  data.house.records  = [];
+  return data;
+}
+
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5) }
 
 // ── PHOTO ───────────────────────────────────────────
