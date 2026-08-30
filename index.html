@@ -126,13 +126,20 @@ img{max-width:100%;display:block}
 }
 .stat-n{
   font-family:'Kanit',sans-serif;
-  font-size:28px;font-weight:700;line-height:1;
+  font-size:18px;font-weight:700;line-height:1;
   color:var(--p);
   font-variant-numeric:tabular-nums;
 }
 .stat-n.ok{color:var(--ok)}
 .stat-n.warn{color:var(--warn)}
-.stat-n.money{font-size:17px}
+.stat-n.money{font-size:14px}
+/* ── ตัวเลขค้างเบิก — เด่นสุด ── */
+.stat-n.big-red{
+  color:#C0392B!important;
+  font-size:42px;
+  line-height:.95;
+  text-shadow:0 2px 10px rgba(192,57,43,.25);
+}
 .stat-lbl{font-size:11px;color:var(--ts);margin-top:4px;font-weight:600;line-height:1.3}
 
 /* ── CARD SHELL ── */
@@ -280,13 +287,14 @@ img{max-width:100%;display:block}
   font-family:'Kanit',sans-serif;
   font-size:14px;font-weight:600;color:var(--th);
 }
-.rec-tags{display:flex;flew-wrap:wrap;gap:5px;margin-top:6px}
+.rec-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
 .tag{
   display:inline-flex;align-items:center;gap:4px;
   padding:3px 8px;border-radius:20px;
   font-size:11px;font-weight:700;line-height:1.4;
 }
-.tag-ok{background:var(--ok-bg);color:var(--ok)}
+.tag-ok{
+background:var(--ok-bg);color:var(--ok)}
 .tag-no{background:var(--err-bg);color:var(--err)}
 .tag-claim{background:var(--p-pale);color:var(--p)}
 .tag-pending{background:var(--warn-bg);color:var(--warn)}
@@ -296,7 +304,7 @@ img{max-width:100%;display:block}
   padding:8px 14px;font-size:13px;color:var(--ts);
   border-top:1px solid var(--border);background:var(--bg);
 }
-.rec-actions{display:flex;flex-direction:column;align-items:flex-end;gap:6py}
+.rec-actions{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .btn-del{
   width:30px;height:30px;border-radius:7px;
   border:1px solid var(--border);background:var(--bg);
@@ -358,1098 +366,24 @@ img{max-width:100%;display:block}
   font-size:13px;font-weight:600;
   transition:background .18s;
 }
-.btn-add-exp:hover{background:#d2eafe}
+.btn-add-exp:hover{border-color:var(--p-light);background:#d2eafe}
 
 /* ── EMPTY STATE ── */
 .empty{text-align:center;padding:32px 20px;color:var(--ts)}
 .empty .ico{font-size:40px;margin-bottom:10px}
-.empty p{font-size:14px;line-height:1.6}
+empty p{font-size:14px;line-height:1.6}
 
 /* ── HISTORY LIST ── */
 .hist{display:flex;flex-direction:column}
 
-/* ── TOAST ── */
-#toast{
-  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#1B5E20;color:#fff;
-  padding:10px 20px;border-radius:24px;
-  font-size:14px;font-weight:600;
-  opacity:0;transition:opacity .25s,transform .25s;
-  pointer-events:none;z-index:500;white-space:nowrap;
-}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* ── MODAL ── */
-.modal-ov{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,.55);
-  display:flex;align-items:flex-end;justify-content:center;
-}
-.modal-box{
-  background:var(--surface);
-  width:100%;max-width:540px;
-  border-radius:20px 20px 0 0;
-  max-height:88vh;
-  display:flex;flex-direction:column;
-  animation:slideUp .22s ease;
-}
-@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
-.modal-hd{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:15px 17px 13px;
-  border-bottom:1px solid var(--border);flex-shrink:0;
-}
-.modal-title{font-family:'Kanit',sans-serif;font-size:16px;font-weight:700;color:var(--th)}
-.btn-close{
-  width:32px;height:32px;border-radius:50%;
-  border:none;background:var(--bg);color:var(--ts);
-  font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-.btn-close:hover{background:var(--err-bg);color:var(--err)}
-.modal-bd{padding:14px 16px;overflow-y:auto;flex:1}
-.modal-ft{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0}
-.btn-edit{
-  width:30px;height:30px;border-radius:7px;
-  border:1px solid var(--p-light);background:var(--p-pale);
-  color:var(--p);font-size:14px;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .18s;
-}
-.btn-edit:hover{background:var(--p-mid);color:#fff;border-color:var(--p-mid)}
-</style>
-
-<div class="app-wrap">
-
-  <!-- HEADER -->
-  <div class="app-header">
-    <div class="header-deco"></div>
-    <div class="header-deco2"></div>
-    <div class="brand">
-      <div class="brand-icon">🏠</div>
-      <div class="brand-text">
-        <h1>บ้านนาย (วัดเสมียนฯ)</h1>
-        <p>ระบบจดบันทึกงานประจำวัน · v4</p>
-      </div>
-    </div>
-    <div class="tab-nav">
-      <button class="tab-btn active" id="tbtn-child" onclick="switchTab('child')">
-        🚗 รับลูก
-      </button>
-      <button class="tab-btn" id="tbtn-house" onclick="switchTab('house')">
-        🔧 ดูแลบ้าน
-      </button>
-    </div>
-    <div style="text-align:center;font-size:11px;padding:4px 0 0;min-height:16px">
-      <span id="sync-badge" style="transition:color 0.3s"></span>
-    </div>
-  </div>
-
-  <!-- ═══════════════ TAB 1 : รับลูก ═══════════════ -->
-  <div class="tab-panel active" id="panel-child">
-
-    <div class="stats-grid" style="margin-top:14px">
-      <div class="stat">
-        <div class="stat-n" id="c-total">0</div>
-        <div class="stat-lbl">รับแล้ว<br>(วัน)</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n ok" id="c-claimed">0</div>
-        <div class="stat-lbl">เบิกค่า<br>เดินทางแล้ว</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n warn" id="c-remain">0</div>
-        <div class="stat-lbl">ยังไม่<br>ได้เบิก</div>
-      </div>
-    </div>
-
-    <!-- Add form -->
-    <div class="card">
-      <div class="card-head" onclick="toggleCard('cf-body','cf-ico')">
-        <div class="card-title"><span>✏️</span> บันทึกวันใหม่</div>
-        <span class="card-icon" id="cf-ico">＋</span>
-      </div>
-      <div class="card-body" id="cf-body">
-        <div class="fg">
-          <label class="flbl">วันที่</label>
-          <div class="date-row">
-            <select class="finput dd" id="c-dd"></select>
-            <select class="finput mm" id="c-mm"></select>
-            <select class="finput yy" id="c-yy"></select>
-          </div>
-        </div>
-        <div class="fg">
-          <label class="flbl">สถานะการรับส่ง</label>
-          <div class="st-grid">
-            <div class="st-wrap">
-              <input type="checkbox" id="c-arr" checked>
-              <label class="st-lbl" for="c-arr">
-                <div class="st-dot">✓</div>ถึงโรงเรียนแล้ว
-              </label>
-            </div>
-            <div class="st-wrap">
-              <input type="checkbox" id="c-del" checked>
-              <label class="st-lbl" for="c-del">
-                <div class="st-dot">✓</div>ส่งเรียบร้อยแล้ว
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="fg">
-          <label class="flbl">รูปภาพ (ถ้ามี)</label>
-          <div class="photo-row">
-            <label class="photo-pick" for="c-photo-cam">📷 ถ่ายรูป</label>
-            <input type="file" id="c-photo-cam" accept="image/*" capture="environment" style="display:none"
-              onchange="pickPhoto(this,'c-prev','c')">
-            <label class="photo-pick" for="c-photo-lib" style="background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลังรูป</label>
-            <input type="file" id="c-photo-lib" accept="image/*" style="display:none"
-              onchange="pickPhoto(this,'c-prev','c')">
-            <img id="c-prev" class="photo-thumb" alt="">
-          </div>
-        </div>
-        <div class="fg">
-          <label class="flbl" for="c-notes">หมายเหตุ</label>
-          <textarea class="finput" id="c-notes" rows="2"
-            placeholder="บันทึกเพิ่มเติม..."></textarea>
-        </div>
-        <div class="fg">
-          <label class="claim-row">
-            <input type="checkbox" id="c-exp-claimed">
-            💰 เบิกค่าเดินทางวันนี้แล้ว
-          </label>
-        </div>
-        <button class="btn-pri" onclick="saveChild()">บันทึกข้อมูล</button>
-      </div>
-    </div>
-
-    <div class="divider"><span>ประวัติทั้งหมด</span></div>
-    <div class="hist" id="child-hist"></div>
-  </div>
-
-  <!-- ═══════════════ TAB 2 : ดูแลบ้าน ═══════════════ -->
-  <div class="tab-panel" id="panel-house">
-
-    <div class="stats-grid" style="margin-top:14px">
-      <div class="stat">
-        <div class="stat-n" id="h-total">0</div>
-        <div class="stat-lbl">ดูแลแล้ว<br>(วัน)</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n ok" id="h-wage-ok">0</div>
-        <div class="stat-lbl">เบิกค่าแรง<br>แล้ว</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n warn" id="h-wage-pend">0</div>
-        <div class="stat-lbl">ค่าแรง<br>ค้างเบิก</div>
-      </div>
-    </div>
-
-    <!-- Expense money summary -->
-    <div class="card" style="margin-bottom:12px">
-      <div style="padding:12px 15px 14px">
-        <div class="stat-lbl" style="margin-bottom:9px;font-size:12px">
-          💳 สรุปค่าของที่ซื้อ (บาท)
-        </div>
-        <div class="stats-grid" style="margin-bottom:0">
-          <div class="stat">
-            <div class="stat-n ok money" id="h-exp-ok">0</div>
-            <div class="stat-lbl">เบิกแล้ว<br>(฿)</div>
-          </div>
-          <div class="stat">
-            <div class="stat-n warn money" id="h-exp-pend">0</div>
-            <div class="stat-lbl">ค้างเบิก<br>(฿)</div>
-          </div>
-          <div class="stat">
-            <div class="stat-n money" id="h-exp-all">0</div>
-            <div class="stat-lbl">ทั้งหมด<br>(฿)</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add form -->
-    <div class="card">
-      <div class="card-head" onclick="toggleCard('hf-body','hf-ico')">
-        <div class="card-title"><span>✏️</span> บันทึกงานวันนี้</div>
-        <span class="card-icon" id="hf-ico">＋</span>
-      </div>
-      <div class="card-body" id="hf-body">
-        <div class="fg">
-          <label class="flbl">วันที่</label>
-          <div class="date-row">
-            <select class="finput dd" id="h-dd"></select>
-            <select class="finput mm" id="h-mm"></select>
-            <select class="finput yy" id="h-yy"></select>
-          </div>
-        </div>
-        <div class="fg">
-          <label class="flbl" for="h-desc">รายละเอียดงาน</label>
-          <textarea class="finput" id="h-desc" rows="2"
-            placeholder="เช่น ซ่อมก๊อกน้ำ, ทาสีรั้ว, ตัดหญ้า..."></textarea>
-        </div>
-        <div class="fg">
-          <label class="flbl">รูปภาพการทำงาน (สูงสุด 5 รูป)</label>
-          <div id="h-photo-rows"></div>
-          <button class="btn-add-exp" onclick="addPhotoRow()" id="h-add-photo-btn" style="margin-top:6px">
-            📷 เพิ่มรูปภาพ
-          </button>
-        </div>
-        <div class="fg">
-          <label class="claim-row">
-            <input type="checkbox" id="h-wage-in">
-            💰 เบิกค่าแรงวันนี้แล้ว
-          </label>
-        </div>
-        <div class="fg">
-          <label class="flbl">รายการค่าของที่ซื้อ</label>
-          <div id="h-exp-rows"></div>
-          <button class="btn-add-exp" onclick="addExpRow()" style="margin-top:6px">
-            ＋ เพิ่มรายการค่าของ
-          </button>
-        </div>
-        <button class="btn-pri" onclick="saveHouse()">บันทึกข้อมูล</button>
-      </div>
-    </div>
-
-    <div class="divider"><span>ประวัติทั้งหมด</span></div>
-    <div class="hist" id="house-hist"></div>
-  </div>
-
-<div id="toast"></div>
-
-<!-- ═══════ DELETE CONFIRM MODAL ═══════ -->
-<div class="modal-ov" id="confirm-del-modal" style="display:none">
-  <div class="modal-box" style="max-width:300px;padding:24px 20px;text-align:center">
-    <div style="font-size:32px;margin-bottom:10px">🗑</div>
-    <div style="font-weight:700;font-size:16px;color:var(--txt);margin-bottom:6px">ยืนยันการลบ</div>
-    <div style="font-size:13px;color:var(--txt2);margin-bottom:20px">บันทึกนี้จะถูกลบถาวร</div>
-    <div style="display:flex;gap:10px">
-      <button class="btn-sec" style="flex:1" onclick="closeModal('confirm-del-modal')">ยกเลิก</button>
-      <button id="confirm-del-btn" class="btn-pri" style="flex:1;background:#e53935;border-color:#e53935">ลบ</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ CHILD EDIT MODAL ═══════ -->
-<div class="modal-ov" id="child-edit-modal" style="display:none"
-  onclick="if(event.target===this)closeModal('child-edit-modal')">
-  <div class="modal-box">
-    <div class="modal-hd">
-      <span class="modal-title">✏️ แก้ไขบันทึก — รับลูก</span>
-      <button class="btn-close" onclick="closeModal('child-edit-modal')">✕</button>
-    </div>
-    <div class="modal-bd">
-      <div class="fg">
-        <label class="flbl">วันที่</label>
-        <div class="date-row">
-          <select class="finput dd" id="ce-dd"></select>
-          <select class="finput mm" id="ce-mm"></select>
-          <select class="finput yy" id="ce-yy"></select>
-        </div>
-      </div>
-      <div class="fg">
-        <label class="flbl">สถานะ</label>
-        <div class="st-grid">
-          <div class="st-wrap">
-            <input type="checkbox" id="ce-arr">
-            <label class="st-lbl" for="ce-arr"><div class="st-dot">✓</div>ถึงโรงเรียนแล้ว</label>
-          </div>
-          <div class="st-wrap">
-            <input type="checkbox" id="ce-del">
-            <label class="st-lbl" for="ce-del"><div class="st-dot">✓</div>ส่งเรียบร้อยแล้ว</label>
-          </div>
-        </div>
-      </div>
-      <div class="fg">
-        <label class="flbl">รูปภาพ</label>
-        <div class="photo-row">
-          <label class="photo-pick" for="ce-photo-cam" style="font-size:12px;padding:7px 12px">📷 ถ่าย</label>
-          <input type="file" id="ce-photo-cam" accept="image/*" capture="environment" style="display:none"
-            onchange="pickPhoto(this,'ce-prev','cedit')">
-          <label class="photo-pick" for="ce-photo-lib" style="font-size:12px;padding:7px 12px;background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลัง</label>
-          <input type="file" id="ce-photo-lib" accept="image/*" style="display:none"
-            onchange="pickPhoto(this,'ce-prev','cedit')">
-          <img id="ce-prev" class="photo-thumb" alt="">
-        </div>
-      </div>
-      <div class="fg">
-        <label class="flbl" for="ce-notes">หมายเหตุ</label>
-        <textarea class="finput" id="ce-notes" rows="2" placeholder="หมายเหตุ..."></textarea>
-      </div>
-      <div class="fg">
-        <label class="claim-row">
-          <input type="checkbox" id="ce-exp-claimed">💰 เบิกค่าเดินทางแล้ว
-        </label>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn-pri" onclick="saveChildEdit()">บันทึกการแก้ไข</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ HOUSE EDIT MODAL ═══════ -->
-<div class="modal-ov" id="house-edit-modal" style="display:none"
-  onclick="if(event.target===this)closeModal('house-edit-modal')">
-  <div class="modal-box">
-    <div class="modal-hd">
-      <span class="modal-title">✏️ แก้ไขบันทึก — ดูแลบ้าน</span>
-      <button class="btn-close" onclick="closeModal('house-edit-modal')">✕</button>
-    </div>
-    <div class="modal-bd">
-      <div class="fg">
-        <label class="flbl">วันที่</label>
-        <div class="date-row">
-          <select class="finput dd" id="he-dd"></select>
-          <select class="finput mm" id="he-mm"></select>
-          <select class="finput yy" id="he-yy"></select>
-        </div>
-      </div>
-      <div class="fg">
-        <label class="flbl" for="he-desc">รายละเอียดงาน</label>
-        <textarea class="finput" id="he-desc" rows="2" placeholder="รายละเอียด..."></textarea>
-      </div>
-      <div class="fg">
-        <label class="flbl">รูปภาพ</label>
-        <div id="he-photo-existing"></div>
-        <div id="he-photo-new-rows"></div>
-        <button class="btn-add-exp" onclick="addEditPhotoRow()" style="margin-top:6px">📷 เพิ่มรูปภาพ</button>
-      </div>
-      <div class="fg">
-        <label class="claim-row">
-          <input type="checkbox" id="he-wage">💰 เบิกค่าแรงแล้ว
-        </label>
-      </div>
-      <div class="fg">
-        <label class="flbl">รายการค่าของ</label>
-        <div id="he-exp-rows"></div>
-        <button class="btn-add-exp" onclick="addEditExpRow(null)" style="margin-top:6px">＋ เพิ่มรายการค่าของ</button>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn-pri" onclick="saveHouseEdit()">บันทึกการแก้ไข</button>
-    </div>
-  </div>
-</div>
-
-</div><!-- /app-wrap -->
-
-<!-- ข้อมูล cloud sync — อย่าแก้ไข -->
-<script>var __D__=/*@@*/null/*@@*/;</script>
-
-<script>
-// ── DATA STORE ──────────────────────────────────────
-const STORE = 'baanAppV1';
-const FB_URL = 'https://baan-naay-default-rtdb.asia-southeast1.firebasedatabase.app/data.json';
-let db = { child:{ records:[] }, house:{ records:[] } };
-let _fbPushTimer = null;
-let _fbPollTimer = null;
-let _localTs = 0;
-let _syncing = false; // แสดงสถานะ sync บน UI
-
-function showSyncBadge(state){ // 'saving' | 'ok' | 'err' | ''
-  const el = document.getElementById('sync-badge');
-  if(!el) return;
-  if(state==='saving'){ el.textContent='⏳ กำลังบันทึก'; el.style.color='var(--txt2)'; }
-  else if(state==='ok'){ el.textContent='✅ บันทึกแล้ว'; el.style.color='green'; setTimeout(()=>showSyncBadge(''),3000); }
-  else if(state==='err'){ el.textContent='⚠️ ไม่สามารถ sync'; el.style.color='#e53935'; }
-  else{ el.textContent=''; }
-}
-
-function persist(){
-  db._ts = Date.now();
-  _localTs = db._ts;
-  try{ localStorage.setItem(STORE, JSON.stringify(db)) }
-  catch(e){ alert('⚠️ พื้นที่จัดเก็บเต็ม กรุณาลบบันทึกเก่าที่มีรูปภาพ') }
-  if(_fbPushTimer) clearTimeout(_fbPushTimer);
-  _fbPushTimer = setTimeout(pushToFB, 1500);
-  showSyncBadge('saving');
-}
-
-async function pushToFB(){
-  _fbPushTimer = null; // ← clear reference ก่อน ไม่งั้น pollFB จะ skip ตลอด
-  try{
-    const res = await fetch(FB_URL, {
-      method:'PUT',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(db)
-    });
-    if(res.ok) showSyncBadge('ok');
-    else showSyncBadge('err');
-  }catch(e){ showSyncBadge('err'); }
-}
-
-async function pullFromFB(){
-  try{
-    const res = await fetch(FB_URL + '?ts=' + Date.now());
-    if(!res.ok) return null;
-    const data = await res.json();
-    if(data && data.child) return data;
-  }catch(e){}
-  return null;
-}
-
-async function pollFB(){
-  if(_fbPushTimer) { _fbPollTimer = setTimeout(pollFB, 30000); return; } // ถ้ากำลัง push อยู่ รอก่อน
-  try{
-    const fbData = await pullFromFB();
-    if(fbData && (fbData._ts||0) > _localTs){
-      db = normalizeDb(fbData);
-      _localTs = db._ts || 0;
-      try{ localStorage.setItem(STORE, JSON.stringify(db)); }catch(e){}
-      renderChild();
-      renderHouse();
-    }
-  }catch(e){}
-  _fbPollTimer = setTimeout(pollFB, 10000); // poll ทุก 10 วินาที
-}
-
-async function hydrate(){
-  // 1. ดึงจาก Firebase ก่อน — ข้อมูลล่าสุดจากทุกเครื่อง
-  const fbData = await pullFromFB();
-  if(fbData){
-    // ถ้า localStorage มีข้อมูลใหม่กว่า Firebase ให้เอา local ขึ้น Firebase แทน
-    let localDb = null;
-    try{
-      const s = localStorage.getItem(STORE);
-      if(s) localDb = JSON.parse(s);
-    }catch(e){}
-    if(localDb && (localDb._ts||0) > (fbData._ts||0)){
-      db = normalizeDb(localDb);
-      _localTs = db._ts || 0;
-      await pushToFB();
-    } else {
-      db = normalizeDb(fbData);
-      _localTs = db._ts || 0;
-      try{ localStorage.setItem(STORE, JSON.stringify(db)); }catch(e){}
-    }
-    return;
-  }
-  // 2. fallback: __D__ (ข้อมูลเก่าจาก artifact sync)
-  try{
-    if(typeof __D__ !== 'undefined' && __D__ && __D__.child){
-      db = normalizeDb(__D__);
-      _localTs = db._ts || 0;
-      await pushToFB(); // migrate ไป Firebase
-      return;
-    }
-  }catch(e){}
-  // 3. fallback: localStorage
-  try{
-    const s = localStorage.getItem(STORE);
-    if(s){
-      db = normalizeDb(JSON.parse(s));
-      _localTs = db._ts || 0;
-      await pushToFB(); // migrate ไป Firebase
-    }
-  }catch(e){}
-}
-// ── ตรวจสอบ/ซ่อม structure ของ db ทุกครั้งที่โหลดข้อมูลจากภายนอก ──
-function normalizeDb(data){
-  if(!data || typeof data !== 'object') data = {};
-  if(!data.child  || typeof data.child  !== 'object') data.child  = { records:[] };
-  if(!Array.isArray(data.child.records))  data.child.records  = [];
-  if(!data.house  || typeof data.house  !== 'object') data.house  = { records:[] };
-  if(!Array.isArray(data.house.records))  data.house.records  = [];
-  return data;
-}
-
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5) }
-
-// ── PHOTO ───────────────────────────────────────────
-const photos = { c:null, h:null };
-
-function pickPhoto(input, prevId, key){
-  const file = input.files[0];
-  if(!file) return;
-  shrinkImage(file, b64 => {
-    photos[key] = b64;
-    const el = document.getElementById(prevId);
-    el.src = b64; el.style.display = 'block';
-  });
-}
-
-function shrinkImage(file, cb){
-  const rd = new FileReader();
-  rd.onload = ev => {
-    const img = new Image();
-    img.onload = () => {
-      const MAX = 900;
-      let [w,h] = [img.width, img.height];
-      if(w > h && w > MAX){ h = Math.round(h*MAX/w); w = MAX; }
-      else if(h >= w && h > MAX){ w = Math.round(w*MAX/h); h = MAX; }
-      const cv = document.createElement('canvas');
-      cv.width = w; cv.height = h;
-      cv.getContext('2d').drawImage(img,0,0,w,h);
-      cb(cv.toDataURL('image/jpeg',0.72));
-    };
-    img.src = ev.target.result;
-  };
-  rd.readAsDataURL(file);
-}
-
-// ── TABS ────────────────────────────────────────────
-function switchTab(tab){
-  ['child','house'].forEach(t => {
-    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
-    document.getElementById('tbtn-'+t).classList.toggle('active', t===tab);
-  });
-}
-
-// ── CARD TOGGLE ─────────────────────────────────────
-function toggleCard(bodyId, icoId){
-  const body = document.getElementById(bodyId);
-  const ico  = document.getElementById(icoId);
-  const open = body.classList.toggle('open');
-  ico.textContent = open ? '－' : '＋';
-  ico.classList.toggle('open', open);
-}
-
-// ── DATE UTILS ──────────────────────────────────────
-function today(){ return new Date().toISOString().split('T')[0] }
-
-const TH_MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
-  'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-
-function buildDateSels(pfx){
-  const dd = document.getElementById(pfx+'-dd');
-  const mm = document.getElementById(pfx+'-mm');
-  const yy = document.getElementById(pfx+'-yy');
-  if(!dd||!mm||!yy) return;
-  dd.innerHTML = '<option value="">วัน</option>';
-  for(let d=1;d<=31;d++){const o=new Option(d,String(d).padStart(2,'0'));dd.add(o);}
-  mm.innerHTML = '<option value="">เดือน</option>';
-  TH_MONTHS.forEach((m,i)=>{const o=new Option(m,String(i+1).padStart(2,'0'));mm.add(o);});
-  yy.innerHTML = '<option value="">ปี</option>';
-  const yr = new Date().getFullYear();
-  for(let y=yr-3;y<=yr+1;y++){const o=new Option((y+543)+' ('+y+')',y);yy.add(o);}
-}
-
-function setDP(pfx, ymd){ // ตั้งค่า date picker จาก YYYY-MM-DD
-  if(!ymd) return;
-  const p = ymd.split('-');
-  if(p.length<3) return;
-  const dd=document.getElementById(pfx+'-dd');
-  const mm=document.getElementById(pfx+'-mm');
-  const yy=document.getElementById(pfx+'-yy');
-  if(dd) dd.value = p[2];
-  if(mm) mm.value = p[1];
-  if(yy) yy.value = p[0];
-}
-
-function getDP(pfx){ // อ่านค่า date picker เป็น YYYY-MM-DD
-  const d=document.getElementById(pfx+'-dd').value;
-  const m=document.getElementById(pfx+'-mm').value;
-  const y=document.getElementById(pfx+'-yy').value;
-  if(!d||!m||!y) return '';
-  return y+'-'+m+'-'+d;
-}
-
-function thDate(str){
-  if(!str) return '';
-  return new Date(str+'T12:00:00').toLocaleDateString('th-TH',{
-    weekday:'short', year:'numeric', month:'short', day:'numeric'
-  });
-}
-function thNum(n){ return Number(n).toLocaleString('th-TH') }
-
-// ── TAB 1 : CHILD ───────────────────────────────────
-function saveChild(){
-  const date = getDP('c');
-  if(!date){ alert('กรุณาเลือกวันที่'); return; }
-  try{
-    db.child.records.unshift({
-      id: uid(), date,
-      arrived:  document.getElementById('c-arr').checked,
-      delivered:document.getElementById('c-del').checked,
-      photo:    photos.c,
-      notes:    document.getElementById('c-notes').value.trim(),
-      expClaimed: document.getElementById('c-exp-claimed').checked
-    });
-    persist();
-    resetChildForm();
-    renderChild();
-    showToast('✅ บันทึกข้อมูลแล้ว');
-  }catch(err){
-    alert('เกิดข้อผิดพลาด: '+err.message);
-  }
-}
-
-function resetChildForm(){
-  setDP('c', today());
-  document.getElementById('c-arr').checked = true;
-  document.getElementById('c-del').checked = true;
-  document.getElementById('c-notes').value = '';
-  document.getElementById('c-exp-claimed').checked = false;
-  document.getElementById('c-photo-cam').value = '';
-  document.getElementById('c-photo-lib').value = '';
-  const prev = document.getElementById('c-prev');
-  prev.src = ''; prev.style.display = 'none';
-  photos.c = null;
-  const body = document.getElementById('cf-body');
-  const ico  = document.getElementById('cf-ico');
-  body.classList.remove('open');
-  ico.textContent = '＋'; ico.classList.remove('open');
-}
-
-function delChild(id){
-  const btn = document.getElementById('confirm-del-btn');
-  btn.onclick = () => {
-    db.child.records = db.child.records.filter(r => r.id !== id);
-    persist(); renderChild(); closeModal('confirm-del-modal');
-  };
-  showModal('confirm-del-modal');
-}
-
-function toggleChildClaim(id){
-  const r = db.child.records.find(r => r.id === id);
-  if(r){ r.expClaimed = !r.expClaimed; persist(); renderChild(); }
-}
-
-function renderChild(){
-  const recs = db.child.records;
-  const total   = recs.length;
-  const claimed = recs.filter(r => r.expClaimed).length;
-  document.getElementById('c-total').textContent   = total;
-  document.getElementById('c-claimed').textContent = claimed;
-  document.getElementById('c-remain').textContent  = total - claimed;
-
-  const hist = document.getElementById('child-hist');
-  if(!recs.length){
-    hist.innerHTML = `<div class="empty"><div class="ico">📭</div><p>ยังไม่มีบันทึก<br>กด "บันทึกวันใหม่" เพื่อเริ่มต้น</p></div>`;
-    return;
-  }
-  const sorted = [...recs].sort((a,b) => b.date.localeCompare(a.date));
-  hist.innerHTML = sorted.map(r => `
-    <div class="rec">
-      <div class="rec-head">
-        <div style="flex:1;min-width:0">
-          <div class="rec-date">📅 ${thDate(r.date)}</div>
-          <div class="rec-tags">
-            <span class="tag ${r.arrived  ?'tag-ok':'tag-no'}">${r.arrived  ?'✅':'❌'} ถึงโรงเรียน</span>
-            <span class="tag ${r.delivered?'tag-ok':'tag-no'}">${r.delivered?'✅':'❌'} ส่งเรียบร้อย</span>
-            <span class="tag ${r.expClaimed?'tag-claim':'tag-pending'}">
-              ${r.expClaimed?'💰 เบิกแล้ว':'⏳ ยังไม่ได้เบิก'}
-            </span>
-          </div>
-        </div>
-        <div class="rec-actions">
-          <button class="btn-edit" onclick="openChildEdit('${r.id}')" title="แก้ไข">✏️</button>
-          <button class="btn-del" onclick="delChild('${r.id}')" title="ลบ">🗑</button>
-          <button class="btn-toggle" onclick="toggleChildClaim('${r.id}')">
-            ${r.expClaimed?'ยกเลิกเบิ�':'เบิกค่าเดินทาง'}
-          </button>
-        </div>
-      </div>
-      ${r.photo ?`<img class="rec-photo" src="${r.photo}" alt="รูป ${thDate(r.date)}">` :''}
-      ${r.notes ?`<div class="rec-note">📝 ${r.notes}</div>` :''}
-    </div>
-  `).join('');
-}
-
-// ── TAB 2 : HOUSE ───────────────────────────────────
-function addExpRow(){
-  const id = uid();
-  const container = document.getElementById('h-exp-rows');
-  const row = document.createElement('div');
-  row.className = 'exp-form-row';
-  row.id = 'er-'+id;
-  row.innerHTML = `
-    <input class="exp-name-in" type="text" placeholder="ชื่อของ เช่น ก๊อกน้ำ">
-    <input class="exp-amt-in" type="number" placeholder="฿ 0" min="0" step="1">
-    <button class="btn-del-sm" onclick="this.closest('.exp-form-row').remove()" title="ลบ">✕</button>
-  `;
-  container.appendChild(row);
-}
-
-function readExpRows(){
-  const rows = document.querySelectorAll('#h-exp-rows .exp-form-row');
-  const result = [];
-  rows.forEach(row => {
-    const item = row.querySelector('.exp-name-in').value.trim();
-    const amt  = parseFloat(row.querySelector('.exp-amt-in').value)||0;
-    if(item) result.push({ id:uid(), item, amount:amt, claimed:false });
-  });
-  return result;
-}
-
-function saveHouse(){
-  const date = getDP('h');
-  if(!date){ alert('กรุณาเลือกวันที่'); return; }
-  try{
-    db.house.records.unshift({
-      id: uid(), date,
-      desc:    document.getElementById('h-desc').value.trim(),
-      photos:  readPhotoRows(),
-      wageClaimed: document.getElementById('h-wage-in').checked,
-      expenses: readExpRows()
-    });
-    persist();
-    resetHouseForm();
-    renderHouse();
-    showToast('✅ บันทึกข้อมูลแล้ว');
-  }catch(err){
-    alert('เกิดข้อผิดพลาด: '+err.message);
-  }
-}
-
-function resetHouseForm(){
-  setDP('h', today());
-  document.getElementById('h-desc').value = '';
-  document.getElementById('h-wage-in').checked = false;
-  photoEntries.clear();
-  document.getElementById('h-photo-rows').innerHTML = '';
-  document.getElementById('h-exp-rows').innerHTML = '';
-  const body = document.getElementById('hf-body');
-  const ico  = document.getElementById('hf-ico');
-  body.classList.remove('open');
-  ico.textContent = '＋'; ico.classList.remove('open');
-}
-
-function delHouse(id){
-  const btn = document.getElementById('confirm-del-btn');
-  btn.onclick = () => {
-    db.house.records = db.house.records.filter(r => r.id !== id);
-    persist(); renderHouse(); closeModal('confirm-del-modal');
-  };
-  showModal('confirm-del-modal');
-}
-
-function toggleWage(id){
-  const r = db.house.records.find(r => r.id === id);
-  if(r){ r.wageClaimed = !r.wageClaimed; persist(); renderHouse(); }
-}
-
-function toggleExpClaim(recId, expId){
-  const r = db.house.records.find(r => r.id === recId);
-  if(!r) return;
-  const e = r.expenses.find(e => e.id === expId);
-  if(e){ e.claimed = !e.claimed; persist(); renderHouse(); }
-}
-
-function renderHouse(){
-  const recs = db.house.records;
-  const total      = recs.length;
-  const wageClaimed= recs.filter(r=>r.wageClaimed).length;
-  document.getElementById('h-total').textContent     = total;
-  document.getElementById('h-wage-ok').textContent   = wageClaimed;
-  document.getElementById('h-wage-pend').textContent = total - wageClaimed;
-
-  let expOk=0, expPend=0;
-  recs.forEach(r => (r.expenses||[]).forEach(e => {
-    if(e.claimed) expOk   += e.amount;
-    else          expPend += e.amount;
-  }));
-  document.getElementById('h-exp-ok').textContent   = thNum(expOk);
-  document.getElementById('h-exp-pend').textContent = thNum(expPend);
-  document.getElementById('h-exp-all').textContent  = thNum(expOk+expPend);
-
-  const hist = document.getElementById('house-hist');
-  if(!recs.length){
-    hist.innerHTML = `<div class="empty"><div class="ico">🔧</div><p>ยังไม่มีบันทึก<br>กด "บันทึกงานวันนี้" เพื่อเริ่มต้น</p></div>`;
-    return;
-  }
-  const sorted = [...recs].sort((a,b) => b.date.localeCompare(a.date));
-  hist.innerHTML = sorted.map(r => {
-    const exps       = r.expenses || [];
-    const totalExp   = exps.reduce((s,e)=>s+e.amount,0);
-    const claimedExp = exps.filter(e=>e.claimed).reduce((s,e)=>s+e.amount,0);
-    return `
-      <div class="rec">
-        <div class="rec-head">
-          <div style="flex:1;min-width:0">
-            <div class="rec-date">📅 ${thDate(r.date)}</div>
-            ${r.desc ? `<div style="font-size:13px;color:var(--tb);margin-top:4px;line-height:1.4">🔧 ${r.desc}</div>` : ''}
-            <div class="rec-tags">
-              <span class="tag ${r.wageClaimed?'tag-ok':'tag-pending'}">
-                ${r.wageClaimed?'✅ เบิกค่าแรงแล้ว':'⏳ ยังไม่ได้เบิกค่าแรง'}
-              </span>
-              ${totalExp>0?`<span class="tag tag-claim">💳 ค่าของ ${thNum(claimedExp)}/${thNum(totalExp)} ฿</span>`:''}
-            </div>
-          </div>
-          <div class="rec-actions">
-            <button class="btn-edit" onclick="openHouseEdit('${r.id}')" title="แก้ไข">✏️</button>
-            <button class="btn-del" onclick="delHouse('${r.id}')" title="ลบ">🗑</button>
-            <button class="btn-toggle" onclick="toggleWage('${r.id}')">
-              ${r.wageClaimed?'ยกเลิกเบิก':'เบิกค่าแรง'}
-            </button>
-          </div>
-        </div>
-        ${(()=>{
-          if(r.photos && r.photos.length){
-            return r.photos.map(p=>`
-              <div style="border-top:1px solid var(--border)">
-                <img src="${p.src}" style="width:100%;max-height:220px;object-fit:cover;display:block" alt="">
-                ${p.caption?`<div style="padding:8px 14px;font-size:13px;color:var(--ts);background:var(--bg)">📝 ${p.caption}</div>`:''}
-              </div>`).join('');
-          } else if(r.photo){
-            return `<img class="rec-photo" src="${r.photo}" alt="">`;
-          }
-          return '';
-        })()}
-        ${exps.length?`
-          <div class="exp-zone">
-            <div class="exp-zone-lbl">รายการค่าของ</div>
-            <div class="exp-list">
-              ${exps.map(e=>`
-                <div class="exp-row">
-                  <span class="exp-name">${e.item}</span>
-                  <span class="exp-amt" id="ea-${r.id}-${e.id}"
-                    onclick="editExpAmt('${r.id}','${e.id}',${e.amount})"
-                    title="แตะเพื่อแก้ยอด" style="cursor:pointer;text-decoration:underline dotted">
-                    ฿ ${thNum(e.amount)}
-                  </span>
-                  <span class="tag exp-tag ${e.claimed?'tag-ok':'tag-pending'}"
-                    onclick="toggleExpClaim('${r.id}','${e.id}')"
-                    title="แตะเพื่อเปลี่ยนสถานะ">
-                    ${e.claimed?'✅ เบิกแล้ว':'⏳ ค้างเบิก'}
-                  </span>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `:''}
-      </div>
-    `;
-  }).join('');
-}
-
-// ── TOAST ────────────────────────────────────────────
-let _toastTimer = null;
-function showToast(msg){
-  const el = document.getElementById('toast');
-  if(!el) return;
-  el.textContent = msg;
-  el.classList.add('show');
-  if(_toastTimer) clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(()=>{ el.classList.remove('show'); }, 2500);
-}
-
-// ── MODAL HELPERS ────────────────────────────────────
-function showModal(id){ document.getElementById(id).style.display='flex'; document.body.style.overflow='hidden'; }
-function closeModal(id){ document.getElementById(id).style.display='none'; document.body.style.overflow=''; }
-
-// ── CHILD EDIT ────────────────────────────────────────
-let editingChildId = null;
-
-function openChildEdit(id){
-  const r = db.child.records.find(r=>r.id===id); if(!r) return;
-  editingChildId = id;
-  setDP('ce', r.date);
-  document.getElementById('ce-arr').checked  = r.arrived;
-  document.getElementById('ce-del').checked  = r.delivered;
-  document.getElementById('ce-notes').value  = r.notes||'';
-  document.getElementById('ce-exp-claimed').checked = r.expClaimed;
-  photos.cedit = r.photo||null;
-  document.getElementById('ce-photo-cam').value = '';
-  document.getElementById('ce-photo-lib').value = '';
-  const prev = document.getElementById('ce-prev');
-  if(r.photo){ prev.src=r.photo; prev.style.display='block'; }
-  else { prev.src=''; prev.style.display='none'; }
-  showModal('child-edit-modal');
-}
-
-function saveChildEdit(){
-  const r = db.child.records.find(r=>r.id===editingChildId); if(!r) return;
-  const date = getDP('ce');
-  if(!date){ alert('กรุณาเลือกวันที่'); return; }
-  r.date      = date;
-  r.arrived   = document.getElementById('ce-arr').checked;
-  r.delivered = document.getElementById('ce-del').checked;
-  r.notes     = document.getElementById('ce-notes').value.trim();
-  r.expClaimed= document.getElementById('ce-exp-claimed').checked;
-  r.photo     = photos.cedit;
-  persist(); closeModal('child-edit-modal'); renderChild();
-}
-
-// ── HOUSE EDIT ────────────────────────────────────────
-let editingHouseId = null;
-const editPhotoEntries = new Map();
-let editExistingPhotos = [];
-
-function openHouseEdit(id){
-  const r = db.house.records.find(r=>r.id===id); if(!r) return;
-  editingHouseId = id;
-  setDP('he', r.date);
-  document.getElementById('he-desc').value  = r.desc||'';
-  document.getElementById('he-wage').checked= r.wageClaimed;
-  // Photos
-  editExistingPhotos = (r.photos||[]).map(p=>({...p, removed:false}));
-  if(r.photo && !(r.photos&&r.photos.length)) editExistingPhotos = [{id:uid(),src:r.photo,caption:'',removed:false}];
-  renderEditExistingPhotos();
-  editPhotoEntries.clear();
-  document.getElementById('he-photo-new-rows').innerHTML='';
-  // Expenses
-  document.getElementById('he-exp-rows').innerHTML='';
-  (r.expenses||[]).forEach(e=>addEditExpRow(e));
-  showModal('house-edit-modal');
-}
-
-function renderEditExistingPhotos(){
-  document.getElementById('he-photo-existing').innerHTML = editExistingPhotos.map((p,i)=> p.removed?'' : `
-    <div style="position:relative;margin-bottom:8px;border-radius:9px;overflow:hidden;border:1px solid var(--border)">
-      <img src="${p.src}" style="width:100%;max-height:130px;object-fit:cover;display:block" alt="">
-      ${p.caption?`<div style="padding:5px 11px;font-size:12px;color:var(--ts);background:var(--bg)">${p.caption}</div>`:''}
-      <button onclick="removeEditExistingPhoto(${i})"
-        style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:12px;cursor:pointer">✕</button>
-    </div>`).join('');
-}
-
-function removeEditExistingPhoto(i){ editExistingPhotos[i].removed=true; renderEditExistingPhotos(); }
-
-function addEditPhotoRow(){
-  const kept = editExistingPhotos.filter(p=>!p.removed).length;
-  if(kept + editPhotoEntries.size >= 5){ alert('เพิ่มรูปได้สูงสุด 5 รูป'); return; }
-  const id = uid();
-  editPhotoEntries.set(id, {src:null, caption:''});
-  const wrap = document.createElement('div');
-  wrap.className='ph-entry'; wrap.id='ep-row-'+id;
-  wrap.style.cssText='margin-bottom:8px;border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;background:var(--surface)';
-  wrap.innerHTML=`
-    <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;flex-wrap:wrap">
-      <label class="photo-pick" for="ep-cam-${id}" style="padding:6px 10px;font-size:12px;flex-shrink:0">📷 ถ่าย</label>
-      <input type="file" id="ep-cam-${id}" accept="image/*" capture="environment" style="display:none" onchange="pickEditPhoto(this,'${id}')">
-      <label class="photo-pick" for="ep-lib-${id}" style="padding:6px 10px;font-size:12px;flex-shrink:0;background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลัง</label>
-      <input type="file" id="ep-lib-${id}" accept="image/*" style="display:none" onchange="pickEditPhoto(this,'${id}')">
-      <input type="text" class="finput" placeholder="อธิบายงาน..." id="ep-cap-${id}"
-        style="flex:1;padding:7px 10px;font-size:13px" oninput="editPhotoEntries.get('${id}').caption=this.value">
-      <button class="btn-del-sm" onclick="removeEditPhotoRow('${id}')">✕</button>
-    </div>
-    <img id="ep-prev-${id}" style="display:none;width:100%;max-height:130px;object-fit:cover" alt="">`;
-  document.getElementById('he-photo-new-rows').appendChild(wrap);
-}
-
-function pickEditPhoto(input, id){
-  const file=input.files[0]; if(!file) return;
-  shrinkImage(file, b64=>{ const e=editPhotoEntries.get(id); if(e) e.src=b64;
-    const p=document.getElementById('ep-prev-'+id); if(p){p.src=b64;p.style.display='block';} });
-}
-function removeEditPhotoRow(id){ editPhotoEntries.delete(id); const r=document.getElementById('ep-row-'+id); if(r)r.remove(); }
-
-function addEditExpRow(existing){
-  const id = existing?existing.id:uid();
-  const container = document.getElementById('he-exp-rows');
-  const row = document.createElement('div');
-  row.className='exp-form-row'; row.id='her-'+id;
-  row.dataset.id=id; row.dataset.claimed=existing?String(existing.claimed):'false';
-  row.innerHTML=`
-    <input class="exp-name-in" type="text" placeholder="ชื่อของ" value="${existing?existing.item:''}">
-    <input class="exp-amt-in" type="number" placeholder="฿ 0" min="0" value="${existing?existing.amount:''}">
-    <button class="btn-del-sm" onclick="this.closest('.exp-form-row').remove()">✕</button>`;
-  container.appendChild(row);
-}
-
-function saveHouseEdit(){
-  const r=db.house.records.find(r=>r.id===editingHouseId); if(!r) return;
-  const date=getDP('he');
-  if(!date){alert('กรุณาเลือกวันที่');return;}
-  r.date=date;
-  r.desc=document.getElementById('he-desc').value.trim();
-  r.wageClaimed=document.getElementById('he-wage').checked;
-  // Photos
-  const kept=editExistingPhotos.filter(p=>!p.removed).map(p=>({id:p.id,src:p.src,caption:p.caption}));
-  const added=[]; editPhotoEntries.forEach((v,id)=>{if(v.src)added.push({id,src:v.src,caption:v.caption||''});});
-  r.photos=[...kept,...added]; r.photo=null;
-  // Expenses
-  const rows=document.querySelectorAll('#he-exp-rows .exp-form-row');
-  r.expenses=[];
-  rows.forEach(row=>{
-    const item=row.querySelector('.exp-name-in').value.trim();
-    const amt=parseFloat(row.querySelector('.exp-amt-in').value)||0;
-    if(item) r.expenses.push({id:row.dataset.id,item,amount:amt,claimed:row.dataset.claimed==='true'});
-  });
-  persist(); closeModal('house-edit-modal'); renderHouse();
-}
-
-// ── MULTI-PHOTO (house) ──────────────────────────────
-const photoEntries = new Map(); // id → { src, caption }
-
-function addPhotoRow(){
-  const rows = document.querySelectorAll('#h-photo-rows .ph-entry');
-  if(rows.length >= 5){ alert('เพิ่มรูปได้สูงสุด 5 รูป'); return; }
-  const id = uid();
-  photoEntries.set(id, { src:null, caption:'' });
-  const wrap = document.createElement('div');
-  wrap.className = 'ph-entry';
-  wrap.id = 'ph-row-'+id;
-  wrap.style.cssText = 'margin-bottom:10px;border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden;background:var(--surface)';
-  wrap.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;padding:9px 10px;flex-wrap:wrap">
-      <label class="photo-pick" for="ph-cam-${id}" style="padding:7px 11px;font-size:12px;flex-shrink:0">📷 ถ่าย</label>
-      <input type="file" id="ph-cam-${id}" accept="image/*" capture="environment" style="display:none"
-        onchange="pickEntryPhoto(this,'${id}')">
-      <label class="photo-pick" for="ph-lib-${id}" style="padding:7px 11px;font-size:12px;flex-shrink:0;background:var(--bg);border-style:solid;border-color:var(--border);color:var(--p)">🖼 คลัง</label>
-      <input type="file" id="ph-lib-${id}" accept="image/*" style="display:none"
-        onchange="pickEntryPhoto(this,'${id}')">
-      <input type="text" class="finput" placeholder="อธิบายงาน..." id="ph-cap-${id}"
-        style="flex:1;padding:7px 10px;font-size:13px"
-        oninput="photoEntries.get('${id}').caption=this.value">
-      <button class="btn-del-sm" onclick="removePhotoRow('${id}')" title="ลบ">✕</button>
-    </div>
-    <img id="ph-prev-${id}" style="display:none;width:100%;max-height:160px;object-fit:cover" alt="">
-  `;
-  document.getElementById('h-photo-rows').appendChild(wrap);
-}
-
-function pickEntryPhoto(input, id){
-  const file = input.files[0];
-  if(!file) return;
-  shrinkImage(file, b64 => {
-    const e = photoEntries.get(id);
-    if(e) e.src = b64;
-    const prev = document.getElementById('ph-prev-'+id);
-    if(prev){ prev.src = b64; prev.style.display = 'block'; }
-  });
-}
-
-function removePhotoRow(id){
-  photoEntries.delete(id);
-  const row = document.getElementById('ph-row-'+id);
-  if(row) row.remove();
-}
-
-function readPhotoRows(){
-  const result = [];
-  photoEntries.forEach((val, id) => {
-    if(val.src) result.push({ id, src:val.src, caption:val.caption||'' });
-  });
-  return result;
-}
-
-// ── INLINE EXPENSE EDIT ──────────────────────────────
-function editExpAmt(recId, expId, current){
-  const span = document.getElementById('ea-'+recId+'-'+expId);
-  if(!span) return;
-  const inp = document.createElement('input');
-  inp.type = 'number'; inp.value = current; inp.min = '0';
-  inp.style.cssText = 'width:72px;padding:2px 6px;border:1.5px solid var(--p-mid);border-radius:5px;font-family:Kanit,sans-serif;font-size:13px;font-weight:600;color:var(--th);background:var(--bg);outline:none;text-align:right';
-  span.replaceWith(inp);
-  inp.focus(); inp.select();
-  const commit = () => {
-    const r = db.house.records.find(r => r.id === recId);
-    if(r){ const ex = r.expenses.find(e => e.id === expId); if(ex){ ex.amount = parseFloat(inp.value)||0; persist(); renderHouse(); } }
-  };
-  inp.addEventListener('blur', commit);
-  inp.addEventListener('keydown', ev => { if(ev.key==='Enter'){ ev.preventDefault(); inp.blur(); } });
-}
-
-// ── INIT ─────────────────────────────────────────────
-(async function(){
-  // สร้าง date selects ก่อน
-  ['c','h','ce','he'].forEach(buildDateSels);
-  await hydrate();
-  setDP('c', today());
-  setDP('h', today());
-  renderChild();
-  renderHouse();
-  // poll ทุก 10 วินาที
-  _fbPollTimer = setTimeout(pollFB, 10000);
-  // poll ทันทีเมื่อกลับมาที่แอพ (เปิดแท็บ / กลับจาก LINE)
-  document.addEventListener('visibilitychange', ()=>{
-    if(document.visibilityState==='visible'){
-      if(_fbPollTimer) clearTimeout(_fbPollTimer);
-      pollFB();
-    }
-  });
-})();
-</script>
+/* ── RECORD COLLAPSE ── */
+.rec-body{display:none}
+.rec-body.open{display:block}
+.rec-chevron{font-size:12px;color:var(--ts);margin-left:4px;transition:transform .2s;display:inline-block}
+.rec-chevron.open{transform:rotate(90deg)}
+
+/* ── CAMERA MODAL ── */
+#cam-modal{position:fixed;inset:0;z-index:600;background:#000;flex-direction:column;display:none}
+#cam-modal.show{display:flex}
+#cam-video{width:100%;flex:1;object-fit:cover;background:#111}
+.cam-bar{padding:18px 24px 28px;backw&�V�C�3�F�7���f�W���W7F�g��6��FV�C�76R�&WGvVV�Ɩv�֗FV�3�6V�FW#�f�W��6�&�泣Т�6��6�6VǶ6���#�6ffc�&6�w&�V�C�G&�7&V�C�&�&FW#��W�6�ƖB&v&�#SR�#SR�#SR��CR��&�&FW"�&F�W3�#'��FF��s���#��f��B�6��S�G��f��B�f֖Ǔ�u6&'V�r�6�2�6W&�c�7W'6�#����FW'Т�6��6�WGFW'�v�GF��c����V�v�C�c���&�&FW"�&F�W3�SS�&6�w&�V�C�6ffc�&�&FW#�W�6�ƖB&v&�#SR�#SR�#SR��B��7W'6�#����FW#�f��B�6��S�#g��F�7���f�W��Ɩv�֗FV�3�6V�FW#��W7F�g��6��FV�C�6V�FW#�f�W��6�&�泣Р��)H)HD�5B)H)H��7F�7G���6�F���f��VC�&�GF�ӣ����VgC�SS�G&�6f�&ӧG&�6�FU���SR�G&�6�FU��#����&6�w&�V�C�3#TS#�6���#�6ffc��FF��s��#��&�&FW"�&F�W3�#G���f��B�6��S�G��f��B�vV�v�C�c���6�G���G&�6�F����6�G��#W2�G&�6f�&��#W3�����FW"�WfV�G3����S��֖�FW��S�v��FR�76S���w&��Т7F�7B�6��w��6�G���G&�6f�&ӧG&�6�FU���SR�G&�6�FU���Р��)H)H��D�)H)H�����F���g���6�F���f��VC���6WC���֖�FW��#��&6�w&�V�C�&v&�����SR���F�7���f�W��Ɩv�֗FV�3�f�W��V�C��W7F�g��6��FV�C�6V�FW#��Т���F��&����&6�w&�V�C�f"���7W&f6R���v�GF��S����v�GF��SC���&�&FW"�&F�W3�#�#�����ֆV�v�C���f���F�7���f�W��f�W��F�&V7F���6��V�㰢��F���6ƖFUW�#'2V6S��Ф�W�g&�W26ƖFUW�g&�׷G&�6f�&ӧG&�6�FU��c����6�G���F��G&�6f�&Ӧ���S��6�G���Т���F�ֆG��F�7���f�W��Ɩv�֗FV�3�6V�FW#��W7F�g��6��FV�C�76R�&WGvVV㰢FF��s�W�w�7���&�&FW"�&�GF�ӣ�6�ƖBf"���&�&FW"��f�W��6�&�泣��Т���F��F�F�W�f��B�f֖Ǔ�t��Br�6�2�6W&�c�f��B�6��S�g��f��B�vV�v�C�s�6���#�f"���F��Т�'F��6��6W��v�GF��3'���V�v�C�3'��&�&FW"�&F�W3�SS��&�&FW#����S�&6�w&�V�C�f"���&r��6���#�f"���G2���f��B�6��S����7W'6�#����FW#��F�7���f�W��Ɩv�֗FV�3�6V�FW#��W7F�g��6��FV�C�6V�FW#��Т�'F��6��6S���fW'�&6�w&�V�C�f"���W'"�&r��6���#�f"���W'"�Т���F��&G�FF��s�G�g���fW&f��rד�WF�f�W��Т���F��gG�FF��s�'�g��&�&FW"�F���6�ƖBf"���&�&FW"��f�W��6�&�泣Т�'F��VF�G��v�GF��3���V�v�C�3��&�&FW"�&F�W3�w���&�&FW#��6�ƖBf"����Ɩv�B��&6�w&�V�C�f"�����R���6���#�f"�����f��B�6��S�G���F�7���f�W��Ɩv�֗FV�3�6V�FW#��W7F�g��6��FV�C�6V�FW#��G&�6�F�������3��Т�'F��VF�C���fW'�&6�w&�V�C�f"����֖B��6���#�6ffc�&�&FW"�6���#�f"����֖B�У��7G��Sࠣ�F�b6�73�&�w&#ࠢ����TDU"����F�b6�73�&ֆVFW"#��F�b6�73�&�VFW"�FV6�#���F�c��F�b6�73�&�VFW"�FV6�"#���F�c��F�b6�73�&'&�B#��F�b6�73�&'&�B֖6��#�	����F�c��F�b6�73�&'&�B�FW�B#�ƃ������.�����.�"��~��N�����^�.�����������>��������N������~�n��~�.�����>����>�~���+rcC�����F�c���F�c��F�b6�73�'F"��b#��'WGF��6�73�'F"�'F�7F�fR"�C�'F'F��6���B"��6Ɩ6��'7v�F6�F"�v6���Br�#�	��r�>����^������'WGF����'WGF��6�73�'F"�'F�"�C�'F'F�ֆ�W6R"��6Ɩ6��'7v�F6�F"�v��W6Rr�#�	�Jr�N����^�����.�����'WGF�����F�c��F�b7G��S�'FW�B�Ɩv�6V�FW#�f��B�6��S���FF��s�G��֖�ֆV�v�C�g�#��7��C�'7��2�&FvR"7G��S�'G&�6�F���6���"�72#���7����F�c���F�cࠢ���)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)YD"��>����^���)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y����F�b6�73�'F"��V�7F�fR"�C�'�V��6���B#ࠢ�F�b6�73�'7FG2�w&�B"7G��S�&�&v���F��G�#��F�b6�73�'7FB#��F�b6�73�'7FB��"�C�&2�F�F�#���F�c��F�b6�73�'7FB��&�#��>�����^���s�'#��~������F�c���F�c��F�b6�73�'7FB#��F�b6�73�'7FB����"�C�&2�6���VB#���F�c��F�b6�73�'7FB��&�#�����N��N���#�'#���N�N���~�.�~��^���s��F�c���F�c��F�b6�73�'7FB#��F�b6�73�'7FB��&�r�&VB"�C�&2�&V���#���F�c��F�b6�73�'7FB��&�#��.��~�N����'#��N�N������N���F�c���F�c���F�cࠢ���FBf�&�����F�b6�73�&6&B#��F�b6�73�&6&BֆVB"��6Ɩ6��'F�vv�T6&B�v6b�&�G�r�v6b֖6�r�#��F�b6�73�&6&B�F�F�R#��7��)�������7��������~�n��~����>�������F�c��7�6�73�&6&B֖6��"�C�&6b֖6�#��ȳ��7����F�c��F�b6�73�&6&B�&�G�"�C�&6b�&�G�#��F�b6�73�&fr#���&V�6�73�&f�&�#��~����~�^�����&V���F�b6�73�&FFR�&�r#��6V�V7B6�73�&f��WBFB"�C�&2�FB#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&2���#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&2ח�#���6V�V7C���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�#����n�.�����.�>�>��������s���&V���F�b6�73�'7B�w&�B#��F�b6�73�'7B�w&#�Ɩ�WBG�S�&6�V6�&��"�C�&2�'""6�V6�VC���&V�6�73�'7B��&�"f�#�&2�'"#��F�b6�73�'7B�F�B#�)�3��F�c��n�n�~�.�>�~��>�^�.����^���p����&V����F�c��F�b6�73�'7B�w&#�Ɩ�WBG�S�&6�V6�&��"�C�&2�FV�"6�V6�VC���&V�6�73�'7B��&�"f�#�&2�FV�#��F�b6�73�'7B�F�B#�)�3��F�c������~��>�^�.���>�����.��^���p����&V����F�c���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�#��>������.����n���.��R����&V���F�b6�73�'��F��&�r#��'WGF��6�73�'��F���6�"��6Ɩ6��&�V�6�W&�#cC����F�2�3�#cC�6��7BS�F�7V�V�B�vWDV�V�V�D'��B�v2�&Wbr��R�7&3�#cC�R�7G��R�F�7���v&��6�wҒ#�	�;r�n���.�#��'WGF�����&V�6�73�'��F���6�"f�#�&2���F��Ɩ""7G��S�&&6�w&�V�C�f"���&r��&�&FW"�7G��S�6�ƖC�&�&FW"�6���#�f"���&�&FW"��6���#�f"����#�	�k��N�^��~�>�������&V��Ɩ�WBG�S�&f��R"�C�&2���F��Ɩ""66WC�&��vR�"7G��S�&F�7������R ���6��vS�'�6���F�F��2�v2�&Wbr�v2r�#�Ɩ�r�C�&2�&Wb"6�73�'��F��F�V�""�C�"#���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�"f�#�&2���FW2#�����.�.����^�����&V���FW�F&V6�73�&f��WB"�C�&2���FW2"&�w3�#" ��6V���FW#�.������~�n�����N�����^�N����#���FW�F&V���F�c��F�b6�73�&fr#���&V�6�73�&6����&�r#�Ɩ�WBG�S�&6�V6�&��"�C�&2�W��6���VB#�	�+����N��N���.��N�N���~�.�~�~������^����^���p����&V����F�c��'WGF��6�73�&'F��&�"��6Ɩ6��'6fT6���B��#�������~�n��.��������S��'WGF�����F�c���F�cࠢ�F�b6�73�&F�f�FW"#��7�����>��~��^�N�~����~����C��7����F�c��F�b6�73�&��7B"�C�&6���Bֆ�7B#���F�c���F�cࠢ���)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)YD""��N����^�����.��)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y����F�b6�73�'F"��V�"�C�'�V�ֆ�W6R#ࠢ�F�b6�73�'7FG2�w&�B"7G��S�&�&v���F��G�#��F�b6�73�'7FB#��F�b6�73�'7FB��"�C�&��F�F�#���F�c��F�b6�73�'7FB��&�#��N����^��^���s�'#��~������F�c���F�c��F�b6�73�'7FB#��F�b6�73�'7FB����"�C�&��vvR���#���F�c��F�b6�73�'7FB��&�#�����N��N���.��>�s�'#���^���s��F�c���F�c��F�b6�73�'7FB#��F�b6�73�'7FB��&�r�&VB"�C�&��vvR�V�B#���F�c��F�b6�73�'7FB��&�#��N���.��>�s�'#��N���.�~����N���F�c���F�c���F�cࠢ���W�V�6R���W�7V��'�����F�b6�73�&6&B"7G��S�&�&v���&�GF�ӣ'�#��F�b7G��S�'FF��s�'�W�G�#��F�b6�73�'7FB��&�"7G��S�&�&v���&�GF�ӣ���f��B�6��S�'�#�	�+2���>�����N���.�.���~�~�^�����~��������.�r����F�c��F�b6�73�'7FG2�w&�B"7G��S�&�&v���&�GF�ӣ#��F�b6�73�'7FB#��F�b6�73�'7FB�������W�"�C�&��W����#���F�c��F�b6�73�'7FB��&�#�����N���^���s�'#�����F�c���F�c��F�b6�73�'7FB#��F�b6�73�'7FB��&�r�&VB"�C�&��W��V�B#���F�c��F�b6�73�'7FB��&�#��N���.�~����N��'#�����F�c���F�c��F�b6�73�'7FB#��F�b6�73�'7FB�����W�"�C�&��W����#���F�c��F�b6�73�'7FB��&�#��~����~����C�'#�����F�c���F�c���F�c���F�c���F�cࠢ���FBf�&�����F�b6�73�&6&B#��F�b6�73�&6&BֆVB"��6Ɩ6��'F�vv�T6&B�v�b�&�G�r�v�b֖6�r�#��F�b6�73�&6&B�F�F�R#��7��)�������7��������~�n��~�.���~������^����F�c��7�6�73�&6&B֖6��"�C�&�b֖6�#��ȳ��7����F�c��F�b6�73�&6&B�&�G�"�C�&�b�&�G�#��F�b6�73�&fr#���&V�6�73�&f�&�#��~����~�^�����&V���F�b6�73�&FFR�&�r#��6V�V7B6�73�&f��WBFB"�C�&��FB#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&����#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&�ח�#���6V�V7C���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�"f�#�&��FW62#��>�.�.�^�����^�.�N�~�.�����&V���FW�F&V6�73�&f��WB"�C�&��FW62"&�w3�#" ��6V���FW#�.�������������������������2��~�.���^�>����r��^��N�������"���#���FW�F&V���F�c��F�b6�73�&fr#���&V�6�73�&f�&�#��>������.����.�>�~�>�~�.��������~�����BR�>��������&V���F�b�C�&����F��&�w2#���F�c��'WGF��6�73�&'F��FB�W�"��6Ɩ6��&FE��F�&�r��"�C�&��FB���F��'F�"7G��S�&�&v���F��g�#�	�;r����N����>������.����'WGF�����F�c��F�b6�73�&fr#���&V�6�73�&6����&�r#�Ɩ�WBG�S�&6�V6�&��"�C�&��vvR֖�#�	�+����N��N���.��>�~�~������^����^���p����&V����F�c��F�b6�73�&fr#���&V�6�73�&f�&�#��>�.�.��.�>�N���.�.���~�~�^�����~�������&V���F�b�C�&��W��&�w2#���F�c��'WGF��6�73�&'F��FB�W�"��6Ɩ6��&FDW�&�r��"7G��S�&�&v���F��g�#��Ȳ����N����>�.�.��.�>�N���.�.���p���'WGF�����F�c��'WGF��6�73�&'F��&�"��6Ɩ6��'6fT��W6R��#�������~�n��.��������S��'WGF�����F�c���F�cࠢ�F�b6�73�&F�f�FW"#��7�����>��~��^�N�~����~����C��7����F�c��F�b6�73�&��7B"�C�&��W6Rֆ�7B#���F�c���F�cࠣ�F�b�C�'F�7B#���F�cࠣ���)Y)Y)Y)Y)Y)Y)YDT�UDR4��d�$���D�)Y)Y)Y)Y)Y)Y)Y����F�b6�73�&��F���b"�C�&6��f�&��FV����F�"7G��S�&F�7������R#��F�b6�73�&��F��&��"7G��S�&���v�GF��3��FF��s�#G�#��FW�B�Ɩv�6V�FW"#��F�b7G��S�&f��B�6��S�3'���&v���&�GF�ӣ�#�	�y��F�c��F�b7G��S�&f��B�vV�v�C�s�f��B�6��S�g��6���#�f"���G�B���&v���&�GF�ӣg�#��.�~���.�����.�>�^����F�c��F�b7G��S�&f��B�6��S�7��6���#�f"���G�C"���&v���&�GF�ӣ#�#�������~�n����^������n����^���n�.�~�3��F�c��F�b7G��S�&F�7���f�W��v��#��'WGF��6�73�&'F��6V2"7G��S�&f�W��"��6Ɩ6��&6��6T��Fv6��f�&��FV����F�r�#��.���^�N���'WGF����'WGF���C�&6��f�&��FV��'F�"6�73�&'F��&�"7G��S�&f�W���&6�w&�V�C�6SS3�3S�&�&FW"�6���#�6SS3�3R#��^����'WGF�����F�c���F�c���F�cࠣ���)Y)Y)Y)Y)Y)Y)Y4���BTD�B��D�)Y)Y)Y)Y)Y)Y)Y����F�b6�73�&��F���b"�C�&6���B�VF�B���F�"7G��S�&F�7������R ���6Ɩ6��&�b�WfV�B�F&vWC���F��2�6��6T��Fv6���B�VF�B���F�r�#��F�b6�73�&��F��&��#��F�b6�73�&��F�ֆB#��7�6�73�&��F��F�F�R#�)����������N�.������~�n�(	B�>����^�����7���'WGF��6�73�&'F��6��6R"��6Ɩ6��&6��6T��Fv6���B�VF�B���F�r�#�)�S��'WGF�����F�c��F�b6�73�&��F��&B#��F�b6�73�&fr#���&V�6�73�&f�&�#��~����~�^�����&V���F�b6�73�&FFR�&�r#��6V�V7B6�73�&f��WBFB"�C�&6R�FB#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&6R���#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&6Rח�#���6V�V7C���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�#����n�.������&V���F�b6�73�'7B�w&�B#��F�b6�73�'7B�w&#�Ɩ�WBG�S�&6�V6�&��"�C�&6R�'"#���&V�6�73�'7B��&�"f�#�&6R�'"#��F�b6�73�'7B�F�B#�)�3��F�c��n�n�~�.�>�~��>�^�.����^���s���&V����F�c��F�b6�73�'7B�w&#�Ɩ�WBG�S�&6�V6�&��"�C�&6R�FV�#���&V�6�73�'7B��&�"f�#�&6R�FV�#��F�b6�73�'7B�F�B#�)�3��F�c������~��>�^�.���>�����.��^���s���&V����F�c���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�#��>������.�����&V���F�b6�73�'��F��&�r#��'WGF��6�73�'��F���6�"��6Ɩ6��&�V�6�W&�#cC����F�2�6VF�C�#cC�6��7BS�F�7V�V�B�vWDV�V�V�D'��B�v6R�&Wbr��R�7&3�#cC�R�7G��R�F�7���v&��6�wҒ"7G��S�&f��B�6��S�'��FF��s�w�'�#�	�;r�n���.�#��'WGF�����&V�6�73�'��F���6�"f�#�&6R���F��Ɩ""7G��S�&f��B�6��S�'��FF��s�w�'��&6�w&�V�C�f"���&r��&�&FW"�7G��S�6�ƖC�&�&FW"�6���#�f"���&�&FW"��6���#�f"����#�	�k��N�^��s���&V��Ɩ�WBG�S�&f��R"�C�&6R���F��Ɩ""66WC�&��vR�"7G��S�&F�7������R ���6��vS�'�6���F�F��2�v6R�&Wbr�v6VF�Br�#�Ɩ�r�C�&6R�&Wb"6�73�'��F��F�V�""�C�"#���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�"f�#�&6R���FW2#�����.�.����^�����&V���FW�F&V6�73�&f��WB"�C�&6R���FW2"&�w3�#""�6V���FW#�.����.�.����^�����#���FW�F&V���F�c��F�b6�73�&fr#���&V�6�73�&6����&�r#�Ɩ�WBG�S�&6�V6�&��"�C�&6R�W��6���VB#�	�+����N��N���.��N�N���~�.�~��^���p����&V����F�c���F�c��F�b6�73�&��F��gB#��'WGF��6�73�&'F��&�"��6Ɩ6��'6fT6���DVF�B��#�������~�n���.�>�����N�#��'WGF�����F�c���F�c���F�cࠣ���)Y)Y)Y)Y)Y)Y)Y��U4RTD�B��D�)Y)Y)Y)Y)Y)Y)Y����F�b6�73�&��F���b"�C�&��W6R�VF�B���F�"7G��S�&F�7������R ���6Ɩ6��&�b�WfV�B�F&vWC���F��2�6��6T��Fv��W6R�VF�B���F�r�#��F�b6�73�&��F��&��#��F�b6�73�&��F�ֆB#��7�6�73�&��F��F�F�R#�)����������N�.������~�n�(	B�N����^�����.����7���'WGF��6�73�&'F��6��6R"��6Ɩ6��&6��6T��Fv��W6R�VF�B���F�r�#�)�S��'WGF�����F�c��F�b6�73�&��F��&B#��F�b6�73�&fr#���&V�6�73�&f�&�#��~����~�^�����&V���F�b6�73�&FFR�&�r#��6V�V7B6�73�&f��WBFB"�C�&�R�FB#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&�R���#���6V�V7C��6V�V7B6�73�&f��WB��"�C�&�Rח�#���6V�V7C���F�c���F�c��F�b6�73�&fr#���&V�6�73�&f�&�"f�#�&�R�FW62#��>�.�.�^�����^�.�N�~�.�����&V���FW�F&V6�73�&f��WB"�C�&�R�FW62"&�w3�#""�6V���FW#�.�>�.�.�^�����^�.�B���#���FW�F&V���F�c��F�b6�73�&fr#���&V�6�73�&f�&�#��>������.�����&V���F�b�C�&�R���F��W��7F��r#���F�c��F�b�C�&�R���F���Wr�&�w2#���F�c��'WGF��6�73�&'F��FB�W�"��6Ɩ6��&FDVF�E��F�&�r��"7G��S�&�&v���F��g�#�	�;r����N����>������.����'WGF�����F�c��F�b6�73�&fr#���&V�6�73�&6����&�r#�Ɩ�WBG�S�&6�V6�&��"�C�&�R�vvR#�	�+����N��N���.��>�~��^���p����&V����F�c��F�b6�73�&fr#���&V�6�73�&f�&�#��>�.�.��.�>�N���.�.���s���&V���F�b�C�&�R�W��&�w2#���F�c��'WGF��6�73�&'F��FB�W�"��6Ɩ6��&FDVF�DW�&�r��V�"7G��S�&�&v���F��g�#��Ȳ����N����>�.�.��.�>�N���.�.���s��'WGF�����F�c���F�c��F�b6�73�&��F��gB#��'WGF��6�73�&'F��&�"��6Ɩ6��'6fT��W6TVF�B��#�������~�n���.�>�����N�#��'WGF�����F�c���F�c���F�cࠣ�F�b�C�&6����F�#��f�FV��C�&6��f�FV�"WF�����6��Ɩ�S���f�FV���F�b6�73�&6��&"#��'WGF��6�73�&6��6�6V�"��6Ɩ6��&6��6T6�W&��#��.���^�N���'WGF����'WGF��6�73�&6��6�WGFW""��6Ɩ6��&6GW&U��F�#�	�;s��'WGF����F�b7G��S�'v�GF��c��#���F�c���F�c���F�cࠣ��F�c������w&��ࠣ����.��������R6��VB7��2(	B���.���.�����N�"����67&�C�f"��E�������V�������67&�Cࠣ�67&�C���)H)HDD5D�$R)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �6��7B5D�$R�v&�cs��6��7Bd%�U$��v�GG3���&�����FVfV�B�'FF"�6��6�WF�V7C�f�&V&6VFF&6R��FF�6��s���WBF"��6���C��&V6�&G3�������W6S��&V6�&G3����Ӱ��WB�f%W6�F��W"��V�ð��WB�f%���F��W"��V�ð��WB���6�G2����WB�7��6��r�f�6S�������N�~���n�.���7��2����T���gV�7F���6��u7��4&FvR�7FFR����w6f��rr�v��r�vW'"r�rp�6��7BV��F�7V�V�B�vWDV�V�V�D'��B�w7��2�&FvRr����b�V&WGW&㰢�b�7FFS���w6f��rr��V��FW�D6��FV�C�~(�2��>�^��~������~�n�s�V��7G��R�6���#�wf"���G�C"�s�ТV�6R�b�7FFS���v��r��V��FW�D6��FV�C�~)�R������~�n���^���rs�V��7G��R�6���#�vw&VV�s�6WEF��V�WB�����6��u7��4&FvR�rr��3��ТV�6R�b�7FFS���vW'"r��V��FW�D6��FV�C�~)�����N������.��.�>�b7��2s�V��7G��R�6���#�r6SS3�3Rs�ТV�6W�V��FW�D6��FV�C�rs�ЧР�gV�7F���W'6�7B����F"��G2�FFR���r�������6�G2�F"��G3��G'����6�7F�&vR�6WD�FV҅5D�$R��4���7G&��v�g��F"��Т6F6��R���W'B�~)�������~�����~�^������N���~����^�~���>���>�.�^��������~�n������.�~�^����^�>������.��r�Т�b��f%W6�F��W"�6�V%F��V�WB��f%W6�F��W"����f%W6�F��W"�6WEF��V�WB�W6�F�d"�S���6��u7��4&FvR�w6f��rr���Р�7��2gV�7F���W6�F�d"�����f%W6�F��W"��V�ò��(i6�V"&VfW&V�6R��������N����~��������d"���6���^�^���@�G'���6��7B&W2�v�BfWF6��d%�U$�����WF��C�uUBr���VFW'3��t6��FV�B�G�Rs�vƖ6F�����6��w���&�G���4���7G&��v�g��F"��ғ���b�&W2����6��u7��4&FvR�v��r���V�6R6��u7��4&FvR�vW'"r����6F6��R��6��u7��4&FvR�vW'"r��ЧР�7��2gV�7F���V��g&��d"����G'���6��7B&W2�v�BfWF6��d%�U$��s�G3�r�FFR���r������b�&W2����&WGW&��V�ð�6��7BFF�v�B&W2�6�ₓ���b�FFbbFF�6���B�&WGW&�FF���6F6��R��Т&WGW&��V�ð�Р�7��2gV�7F������d"�����b��f%W6�F��W"���f%���F��W"�6WEF��V�WB����d"�3��&WGW&�����n���.��>�^��rW6����.�����>����������G'���6��7Bf$FF�v�BV��g&��d"�����b�f$FFbb�f$FF��G7�������6�G2���F"���&�Ɨ�TF"�f$FF������6�G2�F"��G2����G'����6�7F�&vR�6WD�FV҅5D�$R��4���7G&��v�g��F"����6F6��R��Т&V�FW$6���B����&V�FW$��W6R����Т�6F6��R��Т�f%���F��W"�6WEF��V�WB����d"���������~����~�N���.�~�P�Р�7��2gV�7F�����G&FR��������N�n�~���.�f�&V&6R�������(	B�.��������^�^���.�����N���.��~�����N�>�~�����p�6��7Bf$FF�v�BV��g&��d"�����b�f$FF������n���"��6�7F�&vR��^�.��������^�>�������~���"f�&V&6R�>��������"��6��.�n����f�&V&6R��~����WB��6�F"��V�ð�G'���6��7B2���6�7F�&vR�vWD�FV҅5D�$R����b�2���6�F"��4���'6R�2����6F6��R��Т�b���6�F"bb���6�F"��G7�����f$FF��G7������F"���&�Ɨ�TF"���6�F"������6�G2�F"��G2����v�BW6�F�d"�����V�6R��F"���&�Ɨ�TF"�f$FF������6�G2�F"��G2����G'����6�7F�&vR�6WD�FV҅5D�$R��4���7G&��v�g��F"����6F6��R��ТТ&WGW&㰢Т��"�f��&6����E����.��������^�����.���.�'F�f7B7��2��G'����b�G�V�b��E����wV�FVf��VBrbb��E��bb��E���6���B���F"���&�Ɨ�TF"���E�򓰢���6�G2�F"��G2����v�BW6�F�d"�����֖w&FR�N��f�&V&6P�&WGW&㰢Т�6F6��R��Т��2�f��&6����6�7F�&vP�G'���6��7B2���6�7F�&vR�vWD�FV҅5D�$R����b�2���F"���&�Ɨ�TF"��4���'6R�2�������6�G2�F"��G2����v�BW6�F�d"�����֖w&FR�N��f�&V&6P�Т�6F6��R��ЧТ��)H)H�^�>�~����������������7G'V7GW&R�.���rF"�~����N�>����~�~�^���.���^�N�.��������^���.���.�.�����)H)H �gV�7F�����&�Ɨ�TF"�FF����b�FF��G�V�bFF��v�&�V7Br�FF��Ӱ��b�FF�6���B��G�V�bFF�6���B��v�&�V7Br�FF�6���B��&V6�&G3���Ӱ��b�'&��4'&��FF�6���B�&V6�&G2��FF�6���B�&V6�&G2��Ӱ��b�FF��W6R��G�V�bFF��W6R��v�&�V7Br�FF��W6R��&V6�&G3���Ӱ��b�'&��4'&��FF��W6R�&V6�&G2��FF��W6R�&V6�&G2��Ӱ�&WGW&�FF��Р�gV�7F���V�B���&WGW&�FFR���r���F�7G&��r�3b���F��&�F�҂��F�7G&��r�3b��6Ɩ6R�"�R�Р���)H)H��D�)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �6��7B��F�2��3��V������V��Ӱ��gV�7F����6���F��WB�&Wd�B��W����6��7Bf��R���WB�f��W5�Ӱ��b�f��R�&WGW&㰢6�&�洖�vR�f��R�#cB������F�5��W���#cC��6��7BV��F�7V�V�B�vWDV�V�V�D'��B�&Wd�B���V��7&2�#cC�V��7G��R�F�7���v&��6�s��ғ��Р�gV�7F���6�&�洖�vR�f��R�6"���6��7B&B��Wrf��U&VFW"����&B�����B�Wb����6��7B��r��Wr��vR������r�����B�������6��7B�������WB�rƅ�����r�v�GF����r�V�v�EӰ��b�r��bbr��������F��&�V�B������r��r����ТV�6R�b����rbb������r��F��&�V�B�r������������Т6��7B7b�F�7V�V�B�7&VFTV�V�V�B�v6�f2r���7b�v�GF��s�7b�V�v�B����7b�vWD6��FW�B�s&Br��G&t��vR���r���rƂ���6"�7b�F�FFU$v��vR��Vrr��s"����Ӱ���r�7&2�Wb�F&vWB�&W7V�C��Ӱ�&B�&VD4FFU$f��R���Р���)H)HD%2)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���7v�F6�F"�F"����v6���Br�v��W6Ru��f�$V6��B����F�7V�V�B�vWDV�V�V�D'��B�w�V��r�B��6�74Ɨ7B�F�vv�R�v7F�fRr�C���F"���F�7V�V�B�vWDV�V�V�D'��B�wF'F��r�B��6�74Ɨ7B�F�vv�R�v7F�fRr�C���F"���ғ��Р���)H)H4$BD�tt�R)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���F�vv�T6&B�&�G��B��6��B���6��7B&�G��F�7V�V�B�vWDV�V�V�D'��B�&�G��B���6��7B�6��F�7V�V�B�vWDV�V�V�D'��B��6��B���6��7B�V��&�G��6�74Ɨ7B�F�vv�R�v�V�r����6��FW�D6��FV�B��V��~���r�~�Ȳs���6��6�74Ɨ7B�F�vv�R�v�V�r��V⓰�Р���)H)HDDRUD��2)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���F�F����&WGW&��WrFFR���F��4�7G&��r���7ƗB�uBr���Р�6��7BD�����D�2��~���>�.�N�r�~������.���������r�~��^���.�N�r�~�����.�.��r�~���N����.�N�r�~��N�n�����.�.��r��~��>����.�N�r�~���N�~���.�N�r�~�����.�.�.��r�~�^���^�.�N�r�~���N�����N��.�.��r�~������~�.�N�uӰ��gV�7F���'V��DFFU6V�2�g����6��7BFB�F�7V�V�B�vWDV�V�V�D'��B�g��r�FBr���6��7B���F�7V�V�B�vWDV�V�V�D'��B�g��r���r���6��7B���F�7V�V�B�vWDV�V�V�D'��B�g��rח�r����b�FG���������&WGW&㰢FB���W$�D���s��F���f�VS�"#��~������F����s��f�"��WBC��C��3�B����6��7B���Wr�F���B�7G&��r�B��E7F'B�"�sr���FB�FB��Т�����W$�D���s��F���f�VS�"#���N�~�������F����s��D�����D�2�f�$V6����ƒ���6��7B���Wr�F�����7G&��r�����E7F'B�"�sr������FB��ғ�������W$�D���s��F���f�VS�"#����S���F����s��6��7B�"��WrFFR���vWDgV�ŖV"����f�"��WB�ח"�3���ח"�������6��7B���Wr�F��₇��SC2��r�r���r�rǒ�����FB��ЧР�gV�7F���6WDE�g����B�����^����~�N���"FFR�6�W"���.���������D@��b���B�&WGW&㰢6��7B���B�7ƗB�r�r����b���V�wF��2�&WGW&㰢6��7BFC�F�7V�V�B�vWDV�V�V�D'��B�g��r�FBr���6��7B���F�7V�V�B�vWDV�V�V�D'��B�g��r���r���6��7B���F�7V�V�B�vWDV�V�V�D'��B�g��rח�r����b�FB�FB�f�VR��%Ӱ��b��Ғ���f�VR��Ӱ��b�������f�VR��Ӱ�Р�gV�7F���vWDE�g����������.���N���"FFR�6�W"����~����������D@�6��7BC�F�7V�V�B�vWDV�V�V�D'��B�g��r�FBr��f�VS��6��7B��F�7V�V�B�vWDV�V�V�D'��B�g��r���r��f�VS��6��7B��F�7V�V�B�vWDV�V�V�D'��B�g��rח�r��f�VS���b�G�������&WGW&�rs��&WGW&���r�r�Ҳr�r�C��Р�gV�7F���F�FFR�7G"����b�7G"�&WGW&�rs��&WGW&��WrFFR�7G"�uC#��r��F���6�TFFU7G&��r�wF��D�rǰ�vVV�F��w6��'Br��V#�v�V�W&�2r����F��w6��'Br�F��v�V�W&�2p�ғ��ЦgV�7F���F��V҆◲&WGW&��V�&W"���F���6�U7G&��r�wF��D�r�Р���)H)HD"�4���B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���6fT6���B����6��7BFFR�vWDE�v2r����b�FFR���W'B�~��>���>�.��^�~����~����~�^��r��&WGW&�ТG'���F"�6���B�&V6�&G2�V�6��gB����C�V�B���FFR��'&�fVC�F�7V�V�B�vWDV�V�V�D'��B�v2�'"r��6�V6�VB��FVƗfW&VC�F�7V�V�B�vWDV�V�V�D'��B�v2�FV�r��6�V6�VB����F���F�2�2����FW3�F�7V�V�B�vWDV�V�V�D'��B�v2���FW2r��f�VR�G&�҂���W�6���VC�F�7V�V�B�vWDV�V�V�D'��B�v2�W��6���VBr��6�V6�V@�ғ��W'6�7B����&W6WD6���Df�&҂���&V�FW$6���B����6��uF�7B�~)�R������~�n��.��������^��^���rr����6F6��W'"����W'B�~���N�N�.�������N�N���^�.�C�r�W'"��W76vR���ЧР�gV�7F���&W6WD6���Df�&҂���6WDE�v2r�F�F������F�7V�V�B�vWDV�V�V�D'��B�v2�'"r��6�V6�VB�G'VS��F�7V�V�B�vWDV�V�V�D'��B�v2�FV�r��6�V6�VB�G'VS��F�7V�V�B�vWDV�V�V�D'��B�v2���FW2r��f�VR�rs��F�7V�V�B�vWDV�V�V�D'��B�v2�W��6���VBr��6�V6�VB�f�6S��F�7V�V�B�vWDV�V�V�D'��B�v2���F��Ɩ"r��f�VR�rs��6��7B&Wb�F�7V�V�B�vWDV�V�V�D'��B�v2�&Wbr���&Wb�7&2�rs�&Wb�7G��R�F�7���v���Rs����F�2�2��V�ð�6��7B&�G��F�7V�V�B�vWDV�V�V�D'��B�v6b�&�G�r���6��7B�6��F�7V�V�B�vWDV�V�V�D'��B�v6b֖6�r���&�G��6�74Ɨ7B�&V��fR�v�V�r����6��FW�D6��FV�B�~�Ȳs��6��6�74Ɨ7B�&V��fR�v�V�r���Р�gV�7F���FV�6���B��B���6��7B'F��F�7V�V�B�vWDV�V�V�D'��B�v6��f�&��FV��'F�r���'F����6Ɩ6��������F"�6���B�&V6�&G2�F"�6���B�&V6�&G2�f��FW"�"��"�B���B���W'6�7B���&V�FW$6���B���6��6T��Fv6��f�&��FV����F�r���Ӱ�6��t��Fv6��f�&��FV����F�r���Р�gV�7F���F�vv�T6���D6��҆�B���6��7B"�F"�6���B�&V6�&G2�f��B�"��"�B����B����b�"��"�W�6���VB�"�W�6���VC�W'6�7B���&V�FW$6���B���ЧР�gV�7F���&V�FW$6���B����6��7B&V72�F"�6���B�&V6�&G3��6��7BF�F��&V72��V�wF���6��7B6���VB�&V72�f��FW"�"��"�W�6���VB���V�wF���F�7V�V�B�vWDV�V�V�D'��B�v2�F�F�r��FW�D6��FV�B�F�Fð�F�7V�V�B�vWDV�V�V�D'��B�v2�6���VBr��FW�D6��FV�B�6���VC��F�7V�V�B�vWDV�V�V�D'��B�v2�&V���r��FW�D6��FV�B�F�F��6���VC���6��7B��7B�F�7V�V�B�vWDV�V�V�D'��B�v6���Bֆ�7Br����b�&V72��V�wF������7B���W$�D����F�b6�73�&V�G�#��F�b6�73�&�6�#�	�:���F�c����.��~�N�����^������~�n��'#���B.������~�n��~����>�����"����~������>�N����^���������F�c���&WGW&㰢Т6��7B6�'FVB�����&V75��6�'B���"���"�FFR���6�T6��&R��FFR������7B���W$�D���6�'FVB���"�� ��F�b6�73�'&V2#��F�b6�73�'&V2ֆVB"��6Ɩ6��'F�vv�U&V4&�G��rG�"�G�r�"7G��S�&7W'6�#����FW"#��F�b7G��S�&f�W���֖��v�GF��#��F�b6�73�'&V2�FFR#�	�8RG�F�FFR�"�FFR���7�6�73�'&V2�6�Wg&��"�C�&6�Wb�G�"�G�#�)kc��7����F�c��F�b6�73�'&V2�Fw2#��7�6�73�'FrG�"�'&�fVB�wFr���s�wFr���w�#�G�"�'&�fVB�~)�Rs�~)��w��n�n�~�.�>�~��>�^�.����7���7�6�73�'FrG�"�FVƗfW&VC�wFr���s�wFr���w�#�G�"�FVƗfW&VC�~)�Rs�~)��w������~��>�^�.���>�����#��7���7�6�73�'FrG�"�W�6���VC�wFr�6���s�wFr�V�F��rw�#�G�"�W�6���VC�	�+����N���^���rs�~(�2�.��~�N����N�N������N�wТ��7����F�c���F�c��F�b6�73�'&V2�7F���2"��6Ɩ6��&WfV�B�7F�&�vF��ₒ#��'WGF��6�73�&'F��VF�B"��6Ɩ6��&�V�6���DVF�B�rG�"�G�r�"F�F�S�.�����N�"#�)�������'WGF����'WGF��6�73�&'F��FV�"��6Ɩ6��&FV�6���B�rG�"�G�r�"F�F�S�.�^��#�	�y��'WGF����'WGF��6�73�&'F��F�vv�R"��6Ɩ6��'F�vv�T6���D6��҂rG�"�G�r�#�G�"�W�6���VC�~�.���^�N�����N�s�~����N��N���.��N�N���~�.�rwТ��'WGF�����F�c���F�c��F�b6�73�'&V2�&�G�"�C�'&"�G�"�G�#�G�"���F��Ɩ�r6�73�'&V2���F�"7&3�"G�"���F��"�C�.�>����G�F�FFR�"�FFR��#��rwТG�"���FW2��F�b6�73�'&V2���FR#�	�9�G�"���FW7���F�c��rwТ��F�c���F�c������rr���Р���)H)HD""���U4R)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���FDW�&�r����6��7B�B�V�B����6��7B6��F��W"�F�7V�V�B�vWDV�V�V�D'��B�v��W��&�w2r���6��7B&�r�F�7V�V�B�7&VFTV�V�V�B�vF�br���&�r�6�74��R�vW��f�&��&�rs��&�r�B�vW"�r��C��&�r���W$�D��� �Ɩ�WB6�73�&W����R֖�"G�S�'FW�B"�6V���FW#�.���~�����.���r������������������2#�Ɩ�WB6�73�&W���B֖�"G�S�&�V�&W""�6V���FW#�.��"֖��#"7FW�##��'WGF��6�73�&'F��FV��6�"��6Ɩ6��'F��2�6��6W7B�r�W��f�&��&�rr��&V��fR��"F�F�S�.�^��#�)�S��'WGF�����6��F��W"�V�D6���B�&�r���Р�gV�7F���&VDW�&�w2����6��7B&�w2�F�7V�V�B�VW'�6V�V7F�$�r6��W��&�w2�W��f�&��&�rr���6��7B&W7V�B��Ӱ�&�w2�f�$V6��&�r����6��7B�FV��&�r�VW'�6V�V7F�"�r�W����R֖�r��f�VR�G&�҂���6��7B�B�'6Tf��B�&�r�VW'�6V�V7F�"�r�W���B֖�r��f�VR������b��FVҒ&W7V�B�W6����C�V�B����FV����V�C��B�6���VC�f�6Rғ��ғ��&WGW&�&W7V�C��Р�gV�7F���6fT��W6R����6��7BFFR�vWDE�v�r����b�FFR���W'B�~��>���>�.��^�~����~����~�^��r��&WGW&�ТG'���F"��W6R�&V6�&G2�V�6��gB����C�V�B���FFR��FW63�F�7V�V�B�vWDV�V�V�D'��B�v��FW62r��f�VR�G&�҂�����F�3�&VE��F�&�w2����vvT6���VC�F�7V�V�B�vWDV�V�V�D'��B�v��vvR֖�r��6�V6�VB��W�V�6W3�&VDW�&�w2���ғ��W'6�7B����&W6WD��W6Tf�&҂���&V�FW$��W6R����6��uF�7B�~)�R������~�n��.��������^��^���rr����6F6��W'"����W'B�~���N�N�.�������N�N���^�.�C�r�W'"��W76vR���ЧР�gV�7F���&W6WD��W6Tf�&҂���6WDE�v�r�F�F������F�7V�V�B�vWDV�V�V�D'��B�v��FW62r��f�VR�rs��F�7V�V�B�vWDV�V�V�D'��B�v��vvR֖�r��6�V6�VB�f�6S����F�V�G&�W2�6�V"����F�7V�V�B�vWDV�V�V�D'��B�v����F��&�w2r����W$�D���rs��F�7V�V�B�vWDV�V�V�D'��B�v��W��&�w2r����W$�D���rs��6��7B&�G��F�7V�V�B�vWDV�V�V�D'��B�v�b�&�G�r���6��7B�6��F�7V�V�B�vWDV�V�V�D'��B�v�b֖6�r���&�G��6�74Ɨ7B�&V��fR�v�V�r����6��FW�D6��FV�B�~�Ȳs��6��6�74Ɨ7B�&V��fR�v�V�r���Р�gV�7F���FVĆ�W6R��B���6��7B'F��F�7V�V�B�vWDV�V�V�D'��B�v6��f�&��FV��'F�r���'F����6Ɩ6��������F"��W6R�&V6�&G2�F"��W6R�&V6�&G2�f��FW"�"��"�B���B���W'6�7B���&V�FW$��W6R���6��6T��Fv6��f�&��FV����F�r���Ӱ�6��t��Fv6��f�&��FV����F�r���Р�gV�7F���F�vv�UvvR��B���6��7B"�F"��W6R�&V6�&G2�f��B�"��"�B����B����b�"��"�vvT6���VB�"�vvT6���VC�W'6�7B���&V�FW$��W6R���ЧР�gV�7F���F�vv�TW�6��҇&V4�B�W��B���6��7B"�F"��W6R�&V6�&G2�f��B�"��"�B���&V4�B����b�"�&WGW&㰢6��7BR�"�W�V�6W2�f��B�R��R�B���W��B����b�R��R�6���VB�R�6���VC�W'6�7B���&V�FW$��W6R���ЧР�gV�7F���&V�FW$��W6R����6��7B&V72�F"��W6R�&V6�&G3��6��7BF�F��&V72��V�wF���6��7BvvT6���VC�&V72�f��FW"�#��"�vvT6���VB���V�wF���F�7V�V�B�vWDV�V�V�D'��B�v��F�F�r��FW�D6��FV�B�F�Fð�F�7V�V�B�vWDV�V�V�D'��B�v��vvR���r��FW�D6��FV�B�vvT6���VC��F�7V�V�B�vWDV�V�V�D'��B�v��vvR�V�Br��FW�D6��FV�B�F�F��vvT6���VC����WBW�����W�V�C���&V72�f�$V6��"���"�W�V�6W7�ŵҒ�f�$V6��R�����b�R�6���VB�W�����R���V�C��V�6RW�V�B��R���V�C��Ғ���F�7V�V�B�vWDV�V�V�D'��B�v��W����r��FW�D6��FV�B�F��V҆W������F�7V�V�B�vWDV�V�V�D'��B�v��W��V�Br��FW�D6��FV�B�F��V҆W�V�B���F�7V�V�B�vWDV�V�V�D'��B�v��W����r��FW�D6��FV�B�F��V҆W����W�V�B����6��7B��7B�F�7V�V�B�vWDV�V�V�D'��B�v��W6Rֆ�7Br����b�&V72��V�wF������7B���W$�D����F�b6�73�&V�G�#��F�b6�73�&�6�#�	�Js��F�c����.��~�N�����^������~�n��'#���B.������~�n��~�.���~������^��"����~������>�N����^���������F�c���&WGW&㰢Т6��7B6�'FVB�����&V75��6�'B���"���"�FFR���6�T6��&R��FFR������7B���W$�D���6�'FVB���"����6��7BW�2�"�W�V�6W2���Ӱ�6��7BF�F�W��W�2�&VGV6R��2�R���2�R���V�B����6��7B6���VDW��W�2�f��FW"�S��R�6���VB��&VGV6R��2�R���2�R���V�B����&WGW&� ��F�b6�73�'&V2#��F�b6�73�'&V2ֆVB"��6Ɩ6��'F�vv�U&V4&�G��rG�"�G�r�"7G��S�&7W'6�#����FW"#��F�b7G��S�&f�W���֖��v�GF��#��F�b6�73�'&V2�FFR#�	�8RG�F�FFR�"�FFR���7�6�73�'&V2�6�Wg&��"�C�&6�Wb�G�"�G�#�)kc��7����F�c�G�"�FW62��F�b7G��S�&f��B�6��S�7��6���#�f"���F"���&v���F��G��Ɩ�RֆV�v�C��B#�	�JrG�"�FW67���F�c��rwТ�F�b6�73�'&V2�Fw2#��7�6�73�'FrG�"�vvT6���VC�wFr���s�wFr�V�F��rw�#�G�"�vvT6���VC�~)�R����N��N���.��>�~��^���rs�~(�2�.��~�N����N�N������N��N���.��>�rwТ��7��G�F�F�W����7�6�73�'FrFr�6���#�	�+2�N���.�.���rG�F��V҆6���VDW����G�F��V҇F�F�W�������7���rwТ��F�c���F�c��F�b6�73�'&V2�7F���2"��6Ɩ6��&WfV�B�7F�&�vF��ₒ#��'WGF��6�73�&'F��VF�B"��6Ɩ6��&�V��W6TVF�B�rG�"�G�r�"F�F�S�.�����N�"#�)�������'WGF����'WGF��6�73�&'F��FV�"��6Ɩ6��&FVĆ�W6R�rG�"�G�r�"F�F�S�.�^��#�	�y��'WGF����'WGF��6�73�&'F��F�vv�R"��6Ɩ6��'F�vv�UvvR�rG�"�G�r�#�G�"�vvT6���VC�~�.���^�N�����N�s�~����N��N���.��>�rwТ��'WGF�����F�c���F�c��F�b6�73�'&V2�&�G�"�C�'&"�G�"�G�#�G�����簢�b�"���F�2bb"���F�2��V�wF����&WGW&�"���F�2����� ��F�b7G��S�&&�&FW"�F���6�ƖBf"���&�&FW"�#�Ɩ�r7&3�"G��7&7�"7G��S�'v�GF��S���ֆV�v�C�##���&�V7B�f�C�6�fW#�F�7���&��6�"�C�"#�G��6F�����F�b7G��S�'FF��s���G��f��B�6��S�7��6���#�f"���G2��&6�w&�V�C�f"���&r�#�	�9�G��6F������F�c��rwТ��F�c������rr����V�6R�b�"���F򗰢&WGW&�Ɩ�r6�73�'&V2���F�"7&3�"G�"���F��"�C�"#���Т&WGW&�rs��Ғ��ТG�W�2��V�wF�� ��F�b6�73�&W�צ��R#��F�b6�73�&W�צ��R��&�#��>�.�.��.�>�N���.�.���s��F�c��F�b6�73�&W��Ɨ7B#�G�W�2���S�� ��F�b6�73�&W��&�r#��7�6�73�&W����R#�G�R�FV����7���7�6�73�&W���B"�C�&V�G�"�G��G�R�G� ���6Ɩ6��&VF�DW��B�rG�"�G�r�rG�R�G�r�G�R���V�GҒ �F�F�S�.��^�����~���������.���B"7G��S�&7W'6�#����FW#�FW�B�FV6�&F���V�FW&Ɩ�RF�GFVB#���G�F��V҆R���V�B�Т��7���7�6�73�'FrW��FrG�R�6���VC�wFr���s�wFr�V�F��rw� ���6Ɩ6��'F�vv�TW�6��҂rG�"�G�r�rG�R�G�r� �F�F�S�.��^�����~��������^�^���.�����n�.���#�G�R�6���VC�~)�R����N���^���rs�~(�2�N���.�~����N�wТ��7����F�c������rr�Т��F�c���F�c��rwТ��F�c���F�c���Ғ����rr���Р���)H)HD�5B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H ��WB�F�7EF��W"��V�ð�gV�7F���6��uF�7B��6r���6��7BV��F�7V�V�B�vWDV�V�V�D'��B�wF�7Br����b�V&WGW&㰢V��FW�D6��FV�B��6s��V��6�74Ɨ7B�FB�w6��rr����b��F�7EF��W"�6�V%F��V�WB��F�7EF��W"����F�7EF��W"�6WEF��V�WB�����V��6�74Ɨ7B�&V��fR�w6��rr����#S���Р���)H)H��D��T�U%2)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���6��t��F�B��F�7V�V�B�vWDV�V�V�D'��B��B��7G��R�F�7���vf�W�s�F�7V�V�B�&�G��7G��R��fW&f��s�v��FFV�s�ЦgV�7F���6��6T��F�B��F�7V�V�B�vWDV�V�V�D'��B��B��7G��R�F�7���v���Rs�F�7V�V�B�&�G��7G��R��fW&f��s�rs�Р���)H)H4���BTD�B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H ��WBVF�F��t6���D�B��V�ð��gV�7F����V�6���DVF�B��B���6��7B"�F"�6���B�&V6�&G2�f��B�#��"�C��֖B���b�"�&WGW&㰢VF�F��t6���D�B��C��6WDE�v6Rr�"�FFR���F�7V�V�B�vWDV�V�V�D'��B�v6R�'"r��6�V6�VB�"�'&�fVC��F�7V�V�B�vWDV�V�V�D'��B�v6R�FV�r��6�V6�VB�"�FVƗfW&VC��F�7V�V�B�vWDV�V�V�D'��B�v6R���FW2r��f�VR�"���FW7��rs��F�7V�V�B�vWDV�V�V�D'��B�v6R�W��6���VBr��6�V6�VB�"�W�6���VC����F�2�6VF�B�"���F����V�ð�F�7V�V�B�vWDV�V�V�D'��B�v6R���F��Ɩ"r��f�VR�rs��6��7B&Wb�F�7V�V�B�vWDV�V�V�D'��B�v6R�&Wbr����b�"���F�&Wb�7&3�"���F�&Wb�7G��R�F�7���v&��6�s�ТV�6R�&Wb�7&3�rs�&Wb�7G��R�F�7���v���Rs�Т6��t��Fv6���B�VF�B���F�r���Р�gV�7F���6fT6���DVF�B����6��7B"�F"�6���B�&V6�&G2�f��B�#��"�C���VF�F��t6���D�B���b�"�&WGW&㰢6��7BFFR�vWDE�v6Rr����b�FFR���W'B�~��>���>�.��^�~����~����~�^��r��&WGW&�Т"�FFR�FFS��"�'&�fVB�F�7V�V�B�vWDV�V�V�D'��B�v6R�'"r��6�V6�VC��"�FVƗfW&VB�F�7V�V�B�vWDV�V�V�D'��B�v6R�FV�r��6�V6�VC��"���FW2�F�7V�V�B�vWDV�V�V�D'��B�v6R���FW2r��f�VR�G&�҂���"�W�6���VC�F�7V�V�B�vWDV�V�V�D'��B�v6R�W��6���VBr��6�V6�VC��"���F����F�2�6VF�C��W'6�7B���6��6T��Fv6���B�VF�B���F�r��&V�FW$6���B����Р���)H)H��U4RTD�B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H ��WBVF�F��t��W6T�B��V�ð�6��7BVF�E��F�V�G&�W2��Wr������WBVF�DW��7F��u��F�2��Ӱ��gV�7F����V��W6TVF�B��B���6��7B"�F"��W6R�&V6�&G2�f��B�#��"�C��֖B���b�"�&WGW&㰢VF�F��t��W6T�B��C��6WDE�v�Rr�"�FFR���F�7V�V�B�vWDV�V�V�D'��B�v�R�FW62r��f�VR�"�FW67��rs��F�7V�V�B�vWDV�V�V�D'��B�v�R�vvRr��6�V6�VC�"�vvT6���VC������F�0�VF�DW��7F��u��F�2��"���F�7�ŵҒ����⇲����&V��fVC�f�6WҒ����b�"���F�bb�"���F�2bg"���F�2��V�wF���VF�DW��7F��u��F�2����C�V�B���7&3�"���F��6F���rr�&V��fVC�f�6W�Ӱ�&V�FW$VF�DW��7F��u��F�2����VF�E��F�V�G&�W2�6�V"����F�7V�V�B�vWDV�V�V�D'��B�v�R���F���Wr�&�w2r����W$�D���rs����W�V�6W0�F�7V�V�B�vWDV�V�V�D'��B�v�R�W��&�w2r����W$�D���rs���"�W�V�6W7�ŵҒ�f�$V6��S��FDVF�DW�&�r�R����6��t��Fv��W6R�VF�B���F�r���Р�gV�7F���&V�FW$VF�DW��7F��u��F�2����F�7V�V�B�vWDV�V�V�D'��B�v�R���F��W��7F��rr����W$�D���VF�DW��7F��u��F�2����ƒ����&V��fVC�rr� ��F�b7G��S�'�6�F���&V�F�fS��&v���&�GF�ӣ���&�&FW"�&F�W3�����fW&f��s���FFV�&�&FW#��6�ƖBf"���&�&FW"�#�Ɩ�r7&3�"G��7&7�"7G��S�'v�GF��S���ֆV�v�C�3���&�V7B�f�C�6�fW#�F�7���&��6�"�C�"#�G��6F�����F�b7G��S�'FF��s�W���f��B�6��S�'��6���#�f"���G2��&6�w&�V�C�f"���&r�#�G��6F������F�c��rwТ�'WGF����6Ɩ6��'&V��fTVF�DW��7F��u��F�G��Ғ �7G��S�'�6�F���'6��WFS�F��g��&�v�C�g��v�GF��#g���V�v�C�#g��&�&FW"�&F�W3�SS�&�&FW#����S�&6�w&�V�C�&v&�����b��6���#�6ffc�f��B�6��S�'��7W'6�#����FW"#�)�S��'WGF�����F�c������rr���Р�gV�7F���&V��fTVF�DW��7F��u��F򆒗�VF�DW��7F��u��F�5����&V��fVC�G'VS�&V�FW$VF�DW��7F��u��F�2���Р�gV�7F���FDVF�E��F�&�r����6��7B�WB�VF�DW��7F��u��F�2�f��FW"����&V��fVB���V�wF����b��WB�VF�E��F�V�G&�W2�6��R��R���W'B�~����N����>�����N�N�������~�����BR�>����r��&WGW&�Т6��7B�B�V�B����VF�E��F�V�G&�W2�6WB��B��7&3��V���6F���rwғ��6��7Bw&�F�7V�V�B�7&VFTV�V�V�B�vF�br���w&�6�74��S�w��V�G'�s�w&�C�vW�&�r�r��C��w&�7G��R�775FW�C�v�&v���&�GF�ӣ���&�&FW#��W�6�ƖBf"���&�&FW"��&�&FW"�&F�W3�f"���'2���fW&f��s���FFV�&6�w&�V�C�f"���7W&f6R�s��w&���W$�D��� ��F�b7G��S�&F�7���f�W��Ɩv�֗FV�3�6V�FW#�v����FF��s�����f�W��w&�w&#��'WGF��6�73�'��F���6�"��6Ɩ6��&�V�6�W&f�$V�G'��rG��G�r�vWr�"7G��S�'FF��s�g���f��B�6��S�'��f�W��6�&�泣#�	�;r�n���.�#��'WGF�����&V�6�73�'��F���6�"f�#�&W�Ɩ"�G��G�"7G��S�'FF��s�g���f��B�6��S�'��f�W��6�&�泣�&6�w&�V�C�f"���&r��&�&FW"�7G��S�6�ƖC�&�&FW"�6���#�f"���&�&FW"��6���#�f"����#�	�k��N�^��s���&V��Ɩ�WBG�S�&f��R"�C�&W�Ɩ"�G��G�"66WC�&��vR�"7G��S�&F�7������R"��6��vS�'�6�VF�E��F�F��2�rG��G�r�#�Ɩ�WBG�S�'FW�B"6�73�&f��WB"�6V���FW#�.�����N���.�.�~�.�����"�C�&W�6�G��G� �7G��S�&f�W���FF��s�w���f��B�6��S�7�"���WC�&VF�E��F�V�G&�W2�vWB�rG��G�r��6F����F��2�f�VR#��'WGF��6�73�&'F��FV��6�"��6Ɩ6��'&V��fTVF�E��F�&�r�rG��G�r�#�)�S��'WGF�����F�c�Ɩ�r�C�&W�&Wb�G��G�"7G��S�&F�7������S�v�GF��S���ֆV�v�C�3���&�V7B�f�C�6�fW""�C�"#���F�7V�V�B�vWDV�V�V�D'��B�v�R���F���Wr�&�w2r��V�D6���B�w&���Р�gV�7F����6�VF�E��F��WB��B���6��7Bf��S֖�WB�f��W5�Ӳ�b�f��R�&WGW&㰢6�&�洖�vR�f��R�#cC��6��7BS�VF�E��F�V�G&�W2�vWB��B���b�R�R�7&3�#cC��6��7B�F�7V�V�B�vWDV�V�V�D'��B�vW�&Wb�r��B���b����7&3�#cC��7G��R�F�7���v&��6�s��ғ��ЦgV�7F���&V��fTVF�E��F�&�r��B��VF�E��F�V�G&�W2�FV�WFR��B��6��7B#�F�7V�V�B�vWDV�V�V�D'��B�vW�&�r�r��B���b�"�"�&V��fR���Р�gV�7F���FDVF�DW�&�r�W��7F��r���6��7B�B�W��7F��s�W��7F��r�C�V�B����6��7B6��F��W"�F�7V�V�B�vWDV�V�V�D'��B�v�R�W��&�w2r���6��7B&�r�F�7V�V�B�7&VFTV�V�V�B�vF�br���&�r�6�74��S�vW��f�&��&�rs�&�r�C�v�W"�r��C��&�r�FF6WB�C֖C�&�r�FF6WB�6���VC�W��7F��s�7G&��r�W��7F��r�6���VB��vf�6Rs��&�r���W$�D��� �Ɩ�WB6�73�&W����R֖�"G�S�'FW�B"�6V���FW#�.���~�����.���r"f�VS�"G�W��7F��s�W��7F��r�FVӢrw�#�Ɩ�WB6�73�&W���B֖�"G�S�&�V�&W""�6V���FW#�.��"֖��#"f�VS�"G�W��7F��s�W��7F��r���V�C�rw�#��'WGF��6�73�&'F��FV��6�"��6Ɩ6��'F��2�6��6W7B�r�W��f�&��&�rr��&V��fR��#�)�S��'WGF�����6��F��W"�V�D6���B�&�r���Р�gV�7F���6fT��W6TVF�B����6��7B#�F"��W6R�&V6�&G2�f��B�#��"�C���VF�F��t��W6T�B���b�"�&WGW&㰢6��7BFFS�vWDE�v�Rr����b�FFR���W'B�~��>���>�.��^�~����~����~�^��r��&WGW&�Т"�FFS�FFS��"�FW63�F�7V�V�B�vWDV�V�V�D'��B�v�R�FW62r��f�VR�G&�҂���"�vvT6���VC�F�7V�V�B�vWDV�V�V�D'��B�v�R�vvRr��6�V6�VC������F�0�6��7B�WC�VF�DW��7F��u��F�2�f��FW"����&V��fVB�����⇶�C��B�7&3��7&2�6F����6F���Ғ���6��7BFFVCյӲVF�E��F�V�G&�W2�f�$V6���bƖB��綖b�b�7&2�FFVB�W6����B�7&3�b�7&2�6F���b�6F�����rwғ�ғ��"���F�3ղ���WB����FFVEӲ"���F���V�ð���W�V�6W0�6��7B&�w3�F�7V�V�B�VW'�6V�V7F�$�r6�R�W��&�w2�W��f�&��&�rr���"�W�V�6W3յӰ�&�w2�f�$V6��&�s�簢6��7B�FV��&�r�VW'�6V�V7F�"�r�W����R֖�r��f�VR�G&�҂���6��7B�C�'6Tf��B�&�r�VW'�6V�V7F�"�r�W���B֖�r��f�VR������b��FVҒ"�W�V�6W2�W6����C�&�r�FF6WB�BƗFV����V�C��B�6���VC�&�r�FF6WB�6���VC���wG'VRwғ��ғ��W'6�7B���6��6T��Fv��W6R�VF�B���F�r��&V�FW$��W6R����Р���)H)H�T�D����D����W6R�)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �6��7B��F�V�G&�W2��Wr�������B(i"�7&2�6F���Р�gV�7F���FE��F�&�r����6��7B&�w2�F�7V�V�B�VW'�6V�V7F�$�r6����F��&�w2���V�G'�r����b�&�w2��V�wF���R���W'B�~����N����>�����N�N�������~�����BR�>����r��&WGW&�Т6��7B�B�V�B������F�V�G&�W2�6WB��B��7&3��V���6F���rrғ��6��7Bw&�F�7V�V�B�7&VFTV�V�V�B�vF�br���w&�6�74��R�w��V�G'�s��w&�B�w��&�r�r��C��w&�7G��R�775FW�B�v�&v���&�GF�ӣ��&�&FW#��W�6�ƖBf"���&�&FW"��&�&FW"�&F�W3�f"���'2���fW&f��s���FFV�&6�w&�V�C�f"���7W&f6R�s��w&���W$�D��� ��F�b7G��S�&F�7���f�W��Ɩv�֗FV�3�6V�FW#�v����FF��s�����f�W��w&�w&#��'WGF��6�73�'��F���6�"��6Ɩ6��&�V�6�W&f�$V�G'��rG��G�r�w�r�"7G��S�'FF��s�w���f��B�6��S�'��f�W��6�&�泣#�	�;r�n���.�#��'WGF�����&V�6�73�'��F���6�"f�#�'��Ɩ"�G��G�"7G��S�'FF��s�w���f��B�6��S�'��f�W��6�&�泣�&6�w&�V�C�f"���&r��&�&FW"�7G��S�6�ƖC�&�&FW"�6���#�f"���&�&FW"��6���#�f"����#�	�k��N�^��s���&V��Ɩ�WBG�S�&f��R"�C�'��Ɩ"�G��G�"66WC�&��vR�"7G��S�&F�7������R ���6��vS�'�6�V�G'���F�F��2�rG��G�r�#�Ɩ�WBG�S�'FW�B"6�73�&f��WB"�6V���FW#�.�����N���.�.�~�.�����"�C�'��6�G��G� �7G��S�&f�W���FF��s�w���f��B�6��S�7� ����WC�'��F�V�G&�W2�vWB�rG��G�r��6F����F��2�f�VR#��'WGF��6�73�&'F��FV��6�"��6Ɩ6��'&V��fU��F�&�r�rG��G�r�"F�F�S�.�^��#�)�S��'WGF�����F�c�Ɩ�r�C�'��&Wb�G��G�"7G��S�&F�7������S�v�GF��S���ֆV�v�C�c���&�V7B�f�C�6�fW""�C�"#���F�7V�V�B�vWDV�V�V�D'��B�v����F��&�w2r��V�D6���B�w&���Р�gV�7F����6�V�G'���F��WB��B���6��7Bf��R���WB�f��W5�Ӱ��b�f��R�&WGW&㰢6�&�洖�vR�f��R�#cB����6��7BR���F�V�G&�W2�vWB��B����b�R�R�7&2�#cC��6��7B&Wb�F�7V�V�B�vWDV�V�V�D'��B�w��&Wb�r��B����b�&Wb��&Wb�7&2�#cC�&Wb�7G��R�F�7���v&��6�s�Тғ��Р�gV�7F���&V��fU��F�&�r��B�����F�V�G&�W2�FV�WFR��B���6��7B&�r�F�7V�V�B�vWDV�V�V�D'��B�w��&�r�r��B����b�&�r�&�r�&V��fR����Р�gV�7F���&VE��F�&�w2����6��7B&W7V�B��Ӱ���F�V�G&�W2�f�$V6���f���B������b�f��7&2�&W7V�B�W6����B�7&3�f��7&2�6F���f��6F�����rrғ��ғ��&WGW&�&W7V�C��Р���)H)H��Ĕ�RU�T�4RTD�B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H �gV�7F���VF�DW��B�&V4�B�W��B�7W'&V�B���6��7B7��F�7V�V�B�vWDV�V�V�D'��B�vV�r�&V4�B�r�r�W��B����b�7�&WGW&㰢6��7B���F�7V�V�B�7&VFTV�V�V�B�v��WBr������G�R�v�V�&W"s����f�VR�7W'&V�C����֖��ss�����7G��R�775FW�B�wv�GF��s'��FF��s�'�g��&�&FW#��W�6�ƖBf"����֖B��&�&FW"�&F�W3�W��f��B�f֖Ǔ���B�6�2�6W&�c�f��B�6��S�7��f��B�vV�v�C�c�6���#�f"���F���&6�w&�V�C�f"���&r���WFƖ�S����S�FW�B�Ɩv�&�v�Bs��7��&W�6Uv�F����������f�7W2������6V�V7B����6��7B6��֗B�������6��7B"�F"��W6R�&V6�&G2�f��B�"��"�B���&V4�B����b�"��6��7BW��"�W�V�6W2�f��B�R��R�B���W��B���b�W���W����V�B�'6Tf��B����f�VR����W'6�7B���&V�FW$��W6R����ТӰ����FDWfV�DƗ7FV�W"�v&�W"r�6��֗B������FDWfV�DƗ7FV�W"�v�W�F�v�r�Wb����b�Wb�W����tV�FW"r��Wb�&WfV�DFVfV�B������&�W"����ғ��Р���)H)H��B)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H)H ��7��2gV�7F��ₗ�������>���.�rFFR6V�V7G2���������v2r�v�r�v6Rr�v�Ru��f�$V6��'V��DFFU6V�2���v�B��G&FR����6WDE�v2r�F�F������6WDE�v�r�F�F������&V�FW$6���B����&V�FW$��W6R����������~����~�N���.�~�P��f%���F��W"�6WEF��V�WB����d"����������~����~�^���~������^�����.�~�^������������N�N��~�~�����^������.�Ĕ�R��F�7V�V�B�FDWfV�DƗ7FV�W"�wf�6�&�ƗG�6��vRr����簢�b�F�7V�V�B�f�6�&�ƗG�7FFS���wf�6�&�Rr����b��f%���F��W"�6�V%F��V�WB��f%���F��W"������d"����Тғ��Ғ������)H)H4�U$)H)H���WB�6�6��&6���V�ð��WB�6�7G&V���V�ð�gV�7F����V�6�W&�6"����6�6��&6��6#��6��7B��F��F�7V�V�B�vWDV�V�V�D'��B�v6����F�r�����F��6�74Ɨ7B�FB�w6��rr����f�vF�"��VF�FWf�6W2�vWEW6W$�VF���f�FV�f6��t��FS�vV�f�&���V�Bw��VF��f�6WҐ��F�V�7G&V����6�7G&V��7G&VӲF�7V�V�B�vWDV�V�V�D'��B�v6��f�FV�r��7&4�&�V7C�7G&VӲҐ��6F6��W'#���W'B�~�N������.��.�>�n����N�N��^�����~�N�N���r�W'"��W76vR��6��6T6�W&���ғ��ЦgV�7F���6��6T6�W&�����b��6�7G&Vҗ��6�7G&V��vWEG&6�2���f�$V6��C��B�7F������6�7G&V���V�òТF�7V�V�B�vWDV�V�V�D'��B�v6����F�r��6�74Ɨ7B�&V��fR�w6��rr���F�7V�V�B�vWDV�V�V�D'��B�v6��f�FV�r��7&4�&�V7C��V�ð�ЦgV�7F���6GW&U��F򂗰�6��7Bf�FV��F�7V�V�B�vWDV�V�V�D'��B�v6��f�FV�r���6��7B��ӓ��WBs�f�FV��f�FV�v�GF�ƃ�f�FV��f�FV�V�v�C���b�s�bgs��������F��&�V�B������r��s����ТV�6R�b����rbf������s��F��&�V�B�r������������Т6��7B7c�F�7V�V�B�7&VFTV�V�V�B�v6�f2r��7b�v�GF��s�7b�V�v�Cփ��7b�vWD6��FW�B�s&Br��G&t��vR�f�FV����rƂ���6��7B#cC�7b�F�FFU$v��vR��Vrr��s"����b��6�6��&6���6�6��&6��#cB���6��6T6�W&����ЦgV�7F����V�6�W&f�$V�G'���B�&Vf������V�6�W&�#cC�簢�b�&Vf�����w�r���6��7BS���F�V�G&�W2�vWB��B����b�R�R�7&3�#cC���V�6R�b�&Vf�����vWr���6��7BS�VF�E��F�V�G&�W2�vWB��B����b�R�R�7&3�#cC��Т6��7B&Wc�F�7V�V�B�vWDV�V�V�D'��B�&Vf���r�&Wb�r��B����b�&Wb��&Wb�7&3�#cC�&Wb�7G��R�F�7���v&��6�s�Тғ��Р��)H)H4���4�$�R$T4�$E2)H)H��gV�7F���F�vv�U&V4&�G���B���6��7B&�G��F�7V�V�B�vWDV�V�V�D'��B�w&"�r��B����b�&�G��&WGW&㰢6��7B6�Wg&���F�7V�V�B�vWDV�V�V�D'��B�v6�Wb�r��B���6��7B�V��&�G��6�74Ɨ7B�F�vv�R�v�V�r����b�6�Wg&�◰�6�Wg&���FW�D6��FV�C��V��~)k�s�~)kbr��]��ۋ��\��\�����J	��[���[�NB�B���ܚ\�
